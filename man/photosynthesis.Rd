@@ -6,12 +6,29 @@
 \alias{photo}
 \title{Simulate C3 photosynthesis}
 \usage{
-photosynthesis(leaf_par, enviro_par, bake_par, constants, use_tealeaves,
-  progress = TRUE, quiet = FALSE, set_units = TRUE,
-  parallel = FALSE)
+photosynthesis(
+  leaf_par,
+  enviro_par,
+  bake_par,
+  constants,
+  use_tealeaves,
+  progress = TRUE,
+  quiet = FALSE,
+  assert_units = TRUE,
+  parallel = FALSE
+)
 
-photo(leaf_par, enviro_par, bake_par, constants, use_tealeaves,
-  quiet = FALSE, set_units = TRUE)
+photo(
+  leaf_par,
+  enviro_par,
+  bake_par,
+  constants,
+  use_tealeaves,
+  quiet = FALSE,
+  assert_units = TRUE,
+  check = TRUE,
+  prepare_for_tleaf = use_tealeaves
+)
 }
 \arguments{
 \item{leaf_par}{A list of leaf parameters inheriting class \code{leaf_par}. This can be generated using the \code{make_leafpar} function.}
@@ -22,15 +39,19 @@ photo(leaf_par, enviro_par, bake_par, constants, use_tealeaves,
 
 \item{constants}{A list of physical constants inheriting class \code{constants}. This can be generated using the \code{make_constants} function.}
 
-\item{use_tealeaves}{Logical. Should leaf energy balance be used to calculate leaf temperature (T_leaf)? If TRUE, \code{\link[tealeaves]{tleaf}} calculates T_leaf. If FALSE, user-defined T_leaf is used. Additional parameters and constants are required, see \code{\link{make_parameters}}.}
+\item{use_tealeaves}{Logical. Should leaf energy balance be used to calculate leaf temperature (T_leaf)? If TRUE, \code{\link[tealeaves:tleaves]{tleaf}} calculates T_leaf. If FALSE, user-defined T_leaf is used. Additional parameters and constants are required, see \code{\link{make_parameters}}.}
 
 \item{progress}{Logical. Should a progress bar be displayed?}
 
 \item{quiet}{Logical. Should messages be displayed?}
 
-\item{set_units}{Logical. Should \code{units} be set? The function is faster when FALSE, but input must be in correct units or else results will be incorrect without any warning.}
+\item{assert_units}{Logical. Should parameter \code{units} be checked? The function is faster when FALSE, but input must be in correct units or else results will be incorrect without any warning.}
 
 \item{parallel}{Logical. Should parallel processing be used via \code{\link[furrr]{future_map}}?}
+
+\item{check}{Logical. Should arguments checks be done? This is intended to be disabled when \code{\link{photo}} is called from \code{\link{photosynthesis}} Default is TRUE.}
+
+\item{prepare_for_tleaf}{Logical. Should arguments additional calculations for \code{\link[tealeaves:tleaves]{tleaf}}? This is intended to be disabled when \code{\link{photo}} is called from \code{\link{photosynthesis}}. Default is \code{use_tealeaves}.}
 }
 \value{
 A data.frame with the following \code{units} columns \cr
@@ -59,9 +80,9 @@ A data.frame with the following \code{units} columns \cr
 \code{RH} \tab relative humidity (unitless) \cr
 \code{theta_J} \tab curvature factor for light-response curve (unitless) \cr
 \code{T_air} \tab air temperature (K) \cr
-\code{T_leaf} \tab leaf tempearture (K) \cr
+\code{T_leaf} \tab leaf temperature (K) \cr
 \code{V_cmax25} \tab maximum rate of carboxylation at 25 °C (\eqn{\mu}mol CO2 / (m\eqn{^2} s)) \cr
-\code{V_tpu25} \tab rate of triose phosphate utilisation at 25 °C (\eqn{\mu}mol CO2 / (m\eqn{^2} s)) \cr
+\code{V_tpu25} \tab rate of triose phosphate utilization at 25 °C (\eqn{\mu}mol CO2 / (m\eqn{^2} s)) \cr
 \code{wind} \tab wind speed (m / s) \cr
 \cr
 \bold{Baked Input:} \tab \cr
@@ -92,7 +113,7 @@ A data.frame with the following \code{units} columns \cr
 \details{
 \code{photo}: This function takes simulates photosynthetic rate using the Farquhar-von Caemmerer-Berry (\code{\link{FvCB}}) model of C3 photosynthesis for single combined set of leaf parameters (\code{\link{leaf_par}}), environmental parameters (\code{\link{enviro_par}}), and physical constants (\code{\link{constants}}). Leaf parameters are provided at reference temperature (25 °C) and then "baked" to the appropriate leaf temperature using temperature response functions (see \code{\link{bake}}). \cr
 \cr
-\code{photosynthesis}: This function uses \code{photo} to simulate photosynthesis over multiple parameter sets that are generated using \code{\link[tidyr]{crossing}}. \cr
+\code{photosynthesis}: This function uses \code{photo} to simulate photosynthesis over multiple parameter sets that are generated using \code{\link[purrr:cross]{cross_df}}. \cr
 }
 \examples{
 # Single parameter set with 'photo'

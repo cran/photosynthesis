@@ -1,4 +1,4 @@
-## ----setup, include = FALSE----------------------------------------------
+## ----setup, include = FALSE---------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -7,7 +7,7 @@ knitr::opts_chunk$set(
   eval = TRUE
 )
 
-## ---- mwe----------------------------------------------------------------
+## ---- mwe---------------------------------------------------------------------
 
 library(dplyr)
 library(magrittr)
@@ -24,7 +24,7 @@ photo(leaf_par, enviro_par, bake_par, constants, quiet = TRUE,
       use_tealeaves = FALSE)
 
 
-## ---- replace-defaults---------------------------------------------------
+## ---- replace-defaults--------------------------------------------------------
 
 # Use the `replace` argument to replace defaults. This must be a named list, and
 # each named element must have the proper units specified. See `?make_parameters`
@@ -59,7 +59,7 @@ photo %>%
   knitr::kable()
 
 
-## ---- environmental-gradients--------------------------------------------
+## ---- environmental-gradients-------------------------------------------------
 
 # As before, use the `replace` argument to replace defaults, but this time we
 # enter multiple values
@@ -90,7 +90,7 @@ ph %>%
   knitr::kable()
 
 
-## ---- parallel-example---------------------------------------------------
+## ---- parallel-example--------------------------------------------------------
 
 # We'll use the `replace` argument to enter multiple atmospheric CO2 concentrations
 
@@ -122,7 +122,7 @@ ggplot(ph, aes(C_chl, A)) +
   NULL
 
 
-## ---- use-tealeaves-example----------------------------------------------
+## ---- use-tealeaves-example---------------------------------------------------
 
 # You will need to set use_tealeaves = TRUE when making parameters because additional parameters are needed for tealeaves.
 

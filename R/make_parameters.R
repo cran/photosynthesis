@@ -93,7 +93,7 @@ NULL
 #' \eqn{T_\mathrm{leaf}}{T_leaf} \tab \code{T_leaf} \tab leaf temperature \tab K \tab 298.15 \cr
 #' \eqn{V_\mathrm{c,max25}}{V_c,max25} \tab \code{V_cmax25} \tab maximum rate of carboxylation (25 °C) \tab \eqn{\mu}mol CO2 / (m\eqn{^2} s) \tab 150 \cr
 #' \eqn{V_\mathrm{c,max}}{V_c,max} \tab \code{V_cmax} \tab maximum rate of carboxylation (T_leaf) \tab \eqn{\mu}mol CO2 / (m\eqn{^2} s) \tab \link[=bake]{calculated} \cr
-#' \eqn{V_\mathrm{tpu25}}{V_tpu25} \tab \code{V_tpu25} \tab rate of triose phosphate utilisation (25 °C) \tab \eqn{\mu}mol CO2 / (m\eqn{^2} s) \tab 200 \cr
+#' \eqn{V_\mathrm{tpu25}}{V_tpu25} \tab \code{V_tpu25} \tab rate of triose phosphate utilization (25 °C) \tab \eqn{\mu}mol CO2 / (m\eqn{^2} s) \tab 200 \cr
 #' \eqn{V_\mathrm{tpu}}{V_tpu} \tab \code{V_tpu} \tab rate of triose phosphate utilisation (T_leaf) \tab \eqn{\mu}mol CO2 / (m\eqn{^2} s) \tab \link[=bake]{calculated}
 #' }
 #' 
@@ -232,12 +232,22 @@ make_enviropar <- function(replace = NULL, use_tealeaves) {
       E_q = set_units(220, kJ/mol),
       f_par = set_units(0.5),
       r = set_units(0.2),
-      T_air = set_units(298.15, K)
+      T_air = set_units(298.15, K),
+      T_sky = function(pars) {
+        set_units(pars$T_air, K) - set_units(20, K) * set_units(pars$S_sw, W / m ^ 2) / set_units(1000, W / m ^ 2)
+      }
     ))
 
   }
   
   # Replace defaults ----
+  if ("T_sky" %in% names(replace)) {
+    if (is.function(replace$T_sky)) {
+      obj$T_sky <- replace$T_sky
+      replace$T_sky <- NULL
+    }
+  }
+  
   par_equiv <- data.frame(
     tl = c("S_sw"),
     ph = c("PPFD"),
