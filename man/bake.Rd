@@ -24,27 +24,40 @@ temp_resp2(par25, D_s, E_a, E_d, R, T_leaf, T_ref, unitless)
 
 \item{par25}{Parameter value at 25 °C of class \code{units}.}
 
-\item{E_a}{Empirical temperature response value in J/mol of class \code{units}.}
+\item{E_a}{Empirical temperature response value in J/mol of class
+\code{units}.}
 
-\item{R}{Ideal gas constant in J / (mol K) of class \code{units}. See \code{\link{make_constants}}.}
+\item{R}{Ideal gas constant in J / (mol K) of class \code{units}. See
+\code{\link{make_constants}}.}
 
-\item{T_leaf}{Leaf temperature in K of class \code{units}. Will be converted to °C.}
+\item{T_leaf}{Leaf temperature in K of class \code{units}. Will be converted
+to °C.}
 
 \item{T_ref}{Reference temperature in K of class \code{units}.}
 
 \item{unitless}{Logical. Should \code{units} be set? The function is faster when FALSE, but input must be in correct units or else results will be incorrect without any warning.}
 
-\item{D_s}{Empirical temperature response value in J / (mol K) of class \code{units}.}
+\item{D_s}{Empirical temperature response value in J / (mol K) of class
+\code{units}.}
 
-\item{E_d}{Empirical temperature response value in J/mol of class \code{units}.}
+\item{E_d}{Empirical temperature response value in J/mol of class
+\code{units}.}
 }
 \description{
 'bake' leaf parameters using temperature response functions
 
-Constructor function for \code{baked} class. This will also inherit class \code{\link{leaf_par}}. This function ensures that temperature is "baked in" to leaf parameter calculations \code{T_leaf} using temperature response functions detailed below.
+Constructor function for \code{baked} class. This will also inherit class
+\code{\link{leaf_par}}. This function ensures that temperature is "baked in"
+to leaf parameter calculations \code{T_leaf} using temperature response
+functions detailed below.
 }
 \details{
-Several leaf parameters (\code{\link{leaf_par}}) are temperature sensitive. Temperature-sensitive parameters are input at a reference temperature of 25 °C. These parameters are provided as \code{par_name25} and then "baked" using the appropriate temperature response function and parameters in \code{\link{bake_par}}. The "baked" parameter will have the name without "25" appended (\code{par_name}). E.g. \code{V_cmax25} becomes \code{V_cmax}. \cr
+Several leaf parameters (\code{\link{leaf_par}}) are temperature sensitive.
+Temperature-sensitive parameters are input at a reference temperature of 
+25 °C. These parameters are provided as \code{par_name25} and then "baked"
+using the appropriate temperature response function and parameters in
+\code{\link{bake_par}}. The "baked" parameter will have the name without "25"
+appended (\code{par_name}). E.g. \code{V_cmax25} becomes \code{V_cmax}. \cr
 \cr
 Temperature response functions following Bernacchi et al. 2002. \cr
 \cr
@@ -64,14 +77,18 @@ Function 1 increases exponentially with temperature; Function 2 peaks a particul
 \examples{
 bake_par <- make_bakepar()
 constants <- make_constants(use_tealeaves = FALSE)
-leaf_par <- make_leafpar(replace = list(T_leaf = set_units(293.15, "K")),
-                         use_tealeaves = FALSE)
+leaf_par <- make_leafpar(
+  replace = list(T_leaf = set_units(293.15, "K")),
+  use_tealeaves = FALSE
+)
 baked_leafpar <- bake(leaf_par, bake_par, constants)
 
 baked_leafpar$V_cmax25
 baked_leafpar$V_cmax
-
 }
 \references{
-Bernacchi CJ, Portis AR, Nakano H, von Caemmerer S, Long SP. 2002. Temperature response of mesophyll conductance. Implications for the determination of Rubisco enzyme kinetics and for limitations to photosynthesis in vivo. Plant Physiology 130: 1992-8.
+Bernacchi CJ, Portis AR, Nakano H, von Caemmerer S, Long SP. 2002. 
+Temperature response of mesophyll conductance. Implications for the
+determination of Rubisco enzyme kinetics and for limitations to 
+photosynthesis in vivo. Plant Physiology 130: 1992-8.
 }
