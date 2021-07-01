@@ -92,6 +92,8 @@ ph %>%
 
 ## ---- parallel-example--------------------------------------------------------
 
+future::plan("multisession") # Set up plan
+
 # We'll use the `replace` argument to enter multiple atmospheric CO2 concentrations
 
 bake_par <- make_bakepar()

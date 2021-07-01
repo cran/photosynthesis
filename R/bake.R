@@ -1,5 +1,4 @@
 #' S3 class baked
-#' @exportClass baked
 #' @name baked-class
 #' @description See \code{\link{bake}}
 
@@ -30,7 +29,7 @@ NULL
 #' \code{\link{bake_par}}. The "baked" parameter will have the name without "25"
 #' appended (\code{par_name}). E.g. \code{V_cmax25} becomes \code{V_cmax}. \cr
 #' \cr
-#' Temperature response functions following Bernacchi et al. 2002. \cr
+#' Temperature response functions following Buckley and  Diaz-Espejo (2015) \cr
 #' \cr
 #' Temperature response function 1 (\code{temp_response1}): \cr
 #'
@@ -49,10 +48,9 @@ NULL
 #'
 #' @references
 #'
-#' Bernacchi CJ, Portis AR, Nakano H, von Caemmerer S, Long SP. 2002. 
-#' Temperature response of mesophyll conductance. Implications for the
-#' determination of Rubisco enzyme kinetics and for limitations to 
-#' photosynthesis in vivo. Plant Physiology 130: 1992-8.
+#' Buckley TN, Diaz-Espejo A. 2015. Partitioning changes in photosynthetic rate 
+#' into contributions from different variables. Plant, Cell and Environment 38:
+#' 1200-1211.
 #'
 #' @examples
 #' bake_par <- make_bakepar()

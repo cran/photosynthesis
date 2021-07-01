@@ -1,12 +1,12 @@
 Package: photosynthesis
-Version: 2.0.0
-Date: 2020-09-11
+Version: 2.0.1
+Date: 2021-06-30
 Title: Tools for Plant Ecophysiology & Modeling
 Authors@R: c(
     person("Joseph", "Stinziano", email = "josephstinziano@gmail.com", role = "aut", comment = c(ORCID = "0000-0002-7628-4201")),
     person("Cassaundra", "Roback", email = "croback@unm.edu", role = "aut"),
-    person("Demi", "Gamble", email = "Demi.Gamble@csiro.au", role = "aut"),
-    person("Bridget", "Murphy", email = "bmurph26@uwo.ca", role = "aut"),
+    person("Demi", "Sargent", email = "d.sargent@westernsydney.edu.au", role = "aut"),
+    person("Bridget", "Murphy", email = "bridget.murphy@mail.utoronto.ca", role = "aut"),
     person("Patrick", "Hudson", email = "hudson.patrick.j@gmail.com", role = c("aut", "dtc")), 
     person("Chris", "Muir", email = "cdmuir@hawaii.edu", role = c("aut", "cre"), comment = c(ORCID = "0000-0003-2555-3878"))
     )
@@ -52,17 +52,18 @@ Description: Contains modeling and analytical tools for plant ecophysiology.
     R_d).
 License: MIT + file LICENSE
 Encoding: UTF-8
-LazyData: true
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
+URL: https://github.com/cdmuir/photosynthesis
+BugReports: https://github.com/cdmuir/photosynthesis/issues
 NeedsCompilation: no
-Packaged: 2020-09-11 18:17:49 UTC; cdmuir
+Packaged: 2021-07-01 00:26:28 UTC; cdmuir
 Author: Joseph Stinziano [aut] (<https://orcid.org/0000-0002-7628-4201>),
   Cassaundra Roback [aut],
-  Demi Gamble [aut],
+  Demi Sargent [aut],
   Bridget Murphy [aut],
   Patrick Hudson [aut, dtc],
   Chris Muir [aut, cre] (<https://orcid.org/0000-0003-2555-3878>)
 Maintainer: Chris Muir <cdmuir@hawaii.edu>
 Repository: CRAN
-Date/Publication: 2020-09-12 05:40:03 UTC
+Date/Publication: 2021-07-01 04:30:02 UTC
