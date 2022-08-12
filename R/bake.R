@@ -12,13 +12,13 @@ NULL
 #'
 #' @inheritParams photosynthesis
 #' @inheritParams A_supply
-#'
-#' @description
+#' 
+#' @returns 
 #'
 #' Constructor function for \code{baked} class. This will also inherit class
-#' \code{\link{leaf_par}}. This function ensures that temperature is "baked in"
-#' to leaf parameter calculations \code{T_leaf} using temperature response
-#' functions detailed below.
+#' \code{\link{leaf_par}} and \code{\link{list}}. This function ensures that 
+#' temperature is "baked in" to leaf parameter calculations \code{T_leaf} using 
+#' temperature response functions detailed below.
 #'
 #' @details
 #'

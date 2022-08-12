@@ -90,85 +90,90 @@ ph %>%
   knitr::kable()
 
 
-## ---- parallel-example--------------------------------------------------------
+## ---- parallel-example, eval = FALSE------------------------------------------
+#  
+#  # NOTE: parallel example is not evaluated because it was causing an issue with CRAN, but you can copy-and-paste the code to run on your own machine.
+#  
+#  library(future)
+#  plan("multisession") # Set up plan
+#  
+#  # We'll use the `replace` argument to enter multiple atmospheric CO2 concentrations
+#  
+#  bake_par <- make_bakepar()
+#  constants  <- make_constants(use_tealeaves = FALSE)
+#  
+#  enviro_par <- make_enviropar(
+#    replace = list(
+#      C_air = set_units(seq(1, 200, length.out = 20), "Pa")
+#      ), use_tealeaves = FALSE
+#    )
+#  
+#  leaf_par  <- make_leafpar(use_tealeaves = FALSE)
+#  
+#  ph <- photosynthesis(leaf_par, enviro_par, bake_par, constants,
+#                       use_tealeaves = FALSE, progress = FALSE,
+#                       quiet = TRUE, parallel = TRUE)
+#  
+#  # Plot C_c versus A
+#  library(ggplot2)
+#  
+#  ## Drop units for plotting
+#  ph %<>% mutate_if(~ is(.x, "units"), drop_units)
+#  ggplot(ph, aes(C_chl, A)) +
+#    geom_line(size = 2) +
+#    xlab(expression(paste(C[chl], " [Pa]"))) +
+#    ylab(expression(paste("A [", mu, "mol ", m^-2~s^-1, "]"))) +
+#    theme_bw() +
+#    NULL
+#  
 
-future::plan("multisession") # Set up plan
-
-# We'll use the `replace` argument to enter multiple atmospheric CO2 concentrations
-
-bake_par <- make_bakepar()
-constants  <- make_constants(use_tealeaves = FALSE)
-
-enviro_par <- make_enviropar(
-  replace = list(
-    C_air = set_units(seq(1, 200, length.out = 20), "Pa")
-    ), use_tealeaves = FALSE
-  )
-
-leaf_par  <- make_leafpar(use_tealeaves = FALSE)
-
-ph <- photosynthesis(leaf_par, enviro_par, bake_par, constants, 
-                     use_tealeaves = FALSE, progress = FALSE, 
-                     quiet = TRUE, parallel = TRUE)
-
-# Plot C_c versus A
-library(ggplot2)
-
-## Drop units for plotting
-ph %<>% mutate_if(~ is(.x, "units"), drop_units)
-ggplot(ph, aes(C_chl, A)) +
-  geom_line(size = 2) +
-  xlab(expression(paste(C[chl], " [Pa]"))) +
-  ylab(expression(paste("A [", mu, "mol ", m^-2~s^-1, "]"))) +
-  theme_bw() +
-  NULL
-
-
-## ---- use-tealeaves-example---------------------------------------------------
-
-# You will need to set use_tealeaves = TRUE when making parameters because additional parameters are needed for tealeaves.
-
-bake_par <- make_bakepar()
-constants  <- make_constants(use_tealeaves = TRUE)
-
-enviro_par <- make_enviropar(
-  replace = list(
-    T_air = set_units(seq(288.15, 313.15, 1), K)
-    ), use_tealeaves = TRUE
-  )
-
-leaf_par <- make_leafpar(replace = list(
-    g_sc = set_units(c(2, 4), umol/m^2/s/Pa)
-    ), use_tealeaves = TRUE
-  )
-
-ph <- photosynthesis(leaf_par, enviro_par, bake_par, constants, 
-                     use_tealeaves = TRUE, progress = FALSE, 
-                   quiet = TRUE, parallel = TRUE)
-
-# Plot temperature and photosynthesis
-library(ggplot2)
-
-## Drop units for plotting
-ph %<>% 
-  mutate_if(~ is(.x, "units"), drop_units) %>%
-  mutate(`g[s]` = ifelse(g_sc == 2, "low", "high"))
-
-ggplot(ph, aes(T_air, T_leaf, color = `g[s]`)) +
-  geom_line(size = 2, lineend = "round") +
-  geom_abline(slope = 1, intercept = 0, linetype = "dotted") +
-  scale_color_discrete(name = expression(g[s])) +
-  xlab(expression(paste(T[air], " [K]"))) +
-  ylab(expression(paste(T[leaf], " [K]"))) +
-  theme_bw() +
-  NULL
-
-ggplot(ph, aes(T_air, A, color = `g[s]`)) +
-  geom_line(size = 2, lineend = "round") +
-  scale_color_discrete(name = expression(g[s])) +
-  xlab(expression(paste(T[leaf], " [K]"))) +
-  ylab(expression(paste("A [", mu, "mol ", m^-2~s^-1, "]"))) +
-  theme_bw() +
-  NULL
-
+## ---- use-tealeaves-example, eval = FALSE-------------------------------------
+#  
+#  # NOTE: parallel example is not evaluated because it was causing an issue with CRAN, but you can copy-and-paste the code to run on your own machine.
+#  
+#  # You will need to set use_tealeaves = TRUE when making parameters because additional parameters are needed for tealeaves.
+#  
+#  bake_par <- make_bakepar()
+#  constants  <- make_constants(use_tealeaves = TRUE)
+#  
+#  enviro_par <- make_enviropar(
+#    replace = list(
+#      T_air = set_units(seq(288.15, 313.15, 1), K)
+#      ), use_tealeaves = TRUE
+#    )
+#  
+#  leaf_par <- make_leafpar(replace = list(
+#      g_sc = set_units(c(2, 4), umol/m^2/s/Pa)
+#      ), use_tealeaves = TRUE
+#    )
+#  
+#  ph <- photosynthesis(leaf_par, enviro_par, bake_par, constants,
+#                       use_tealeaves = TRUE, progress = FALSE,
+#                     quiet = TRUE, parallel = TRUE)
+#  
+#  # Plot temperature and photosynthesis
+#  library(ggplot2)
+#  
+#  ## Drop units for plotting
+#  ph %<>%
+#    mutate_if(~ is(.x, "units"), drop_units) %>%
+#    mutate(`g[s]` = ifelse(g_sc == 2, "low", "high"))
+#  
+#  ggplot(ph, aes(T_air, T_leaf, color = `g[s]`)) +
+#    geom_line(size = 2, lineend = "round") +
+#    geom_abline(slope = 1, intercept = 0, linetype = "dotted") +
+#    scale_color_discrete(name = expression(g[s])) +
+#    xlab(expression(paste(T[air], " [K]"))) +
+#    ylab(expression(paste(T[leaf], " [K]"))) +
+#    theme_bw() +
+#    NULL
+#  
+#  ggplot(ph, aes(T_air, A, color = `g[s]`)) +
+#    geom_line(size = 2, lineend = "round") +
+#    scale_color_discrete(name = expression(g[s])) +
+#    xlab(expression(paste(T[leaf], " [K]"))) +
+#    ylab(expression(paste("A [", mu, "mol ", m^-2~s^-1, "]"))) +
+#    theme_bw() +
+#    NULL
+#  
 

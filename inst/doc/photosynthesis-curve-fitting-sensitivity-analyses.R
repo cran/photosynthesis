@@ -81,7 +81,7 @@ fits_graphs <- compile_data(fits,
                             list_element = 3)
 
 #Print graphs to jpeg
-#print_graphs(data = fits_graphs,
+# print_graphs(data = fits_graphs,
 #             path = tempdir(),
 #             output_type = "jpeg")
 
@@ -144,11 +144,10 @@ fits[[3]][[2]]
 fits_graphs <- compile_data(fits,
                             list_element = 2)
 
-#Print graphs to pdf.
-#print_graphs(data = fits_graphs,
+#Print graphs to jpeg
+# print_graphs(data = fits_graphs,
 #             path = tempdir(),
-#             output_type = "pdf",
-#             pdf_filename = "mygraphs.pdf")
+#             output_type = "jpeg")
 
 #Compile parameters into dataframe for analysis
 fits_pars <- compile_data(fits,
