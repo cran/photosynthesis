@@ -18,56 +18,31 @@
 #'
 #' @param assert_units Logical. Should parameter \code{units} be checked? The function is faster when FALSE, but input must be in correct units or else results will be incorrect without any warning.
 #'
+#' @param check Logical. Should arguments checks be done? Default is TRUE.
+#' 
 #' @param parallel Logical. Should parallel processing be used via \code{\link[furrr]{future_map}}?
+#' 
+#' @param use_legacy_version Logical. Should legacy model (<2.1.0) be used? See \href{https://github.com/cdmuir/photosynthesis/blob/master/NEWS.md}{NEWS} for further information. Default is FALSE. 
 #'
 #' @return
 #' A data.frame with the following \code{units} columns \cr
+#' 
+#' \bold{Inputs:}
+#' ```{r, echo=FALSE}
+#'  make_photo_parameter_table(!temperature_response, !tealeaves)
+#' ```
+#' \bold{Baked Inputs:} 
+#' ```{r, echo=FALSE}
+#'  make_photo_parameter_table(temperature_response, !tealeaves)
+#' ```
 #'
 #' \tabular{ll}{
 #'
-#' \bold{Input:} \tab \cr
-#' \cr
-#' \code{C_air} \tab atmospheric CO2 concentration (Pa) \cr
-#' \code{g_mc25} \tab mesophyll conductance to CO2 at 25 °C (\eqn{\mu}mol / (m\eqn{^2} s Pa)) \cr
-#' \code{g_sc} \tab stomatal conductance to CO2 (\eqn{\mu}mol / (m\eqn{^2} s Pa)) \cr
-#' \code{g_uc} \tab cuticular conductance to CO2 (\eqn{\mu}mol / (m\eqn{^2} s Pa)) \cr
-#' \code{gamma_star25} \tab chloroplastic CO2 compensation point at 25 °C (Pa) \cr
-#' \code{J_max25} \tab potential electron transport at 25 °C (\eqn{\mu}mol CO2) / (m\eqn{^2} s) \cr
-#' \code{K_C25} \tab Michaelis constant for carboxylation at 25 °C (\eqn{\mu}mol / mol) \cr
-#' \code{K_O25} \tab Michaelis constant for oxygenation at 25 °C (\eqn{\mu}mol / mol) \cr
-#' \code{k_mc} \tab partition of \eqn{g_\mathrm{mc}}{g_mc} to lower mesophyll (unitless) \cr
-#' \code{k_sc} \tab partition of \eqn{g_\mathrm{sc}}{g_sc} to lower surface (unitless) \cr
-#' \code{k_uc} \tab partition of \eqn{g_\mathrm{uc}}{g_uc} to lower surface (unitless) \cr
-#' \code{leafsize} \tab leaf characteristic dimension (m) \cr
-#' \code{O} \tab atmospheric O2 concentration (kPa) \cr
-#' \code{P} \tab atmospheric pressure (kPa) \cr
-#' \code{phi_J} \tab initial slope of the response of J to PPFD (unitless) \cr
-#' \code{PPFD} \tab photosynthetic photon flux density (umol quanta / (m\eqn{^2} s)) \cr
-#' \code{R_d25} \tab nonphotorespiratory CO2 release  at 25 °C (\eqn{\mu}mol CO2 / (m\eqn{^2} s)) \cr
-#' \code{RH} \tab relative humidity (unitless) \cr
-#' \code{theta_J} \tab curvature factor for light-response curve (unitless) \cr
-#' \code{T_air} \tab air temperature (K) \cr
-#' \code{T_leaf} \tab leaf temperature (K) \cr
-#' \code{V_cmax25} \tab maximum rate of carboxylation at 25 °C (\eqn{\mu}mol CO2 / (m\eqn{^2} s)) \cr
-#' \code{V_tpu25} \tab rate of triose phosphate utilization at 25 °C (\eqn{\mu}mol CO2 / (m\eqn{^2} s)) \cr
-#' \code{wind} \tab wind speed (m / s) \cr
-#' \cr
-#' \bold{Baked Input:} \tab \cr
-#' \cr
-#' \code{g_mc} \tab mesophyll conductance to CO2 at \code{T_leaf} (\eqn{\mu}mol / (m\eqn{^2} s Pa)) \cr
-#' \code{gamma_star} \tab chloroplastic CO2 compensation point at \code{T_leaf} (Pa) \cr
-#' \code{J_max} \tab potential electron transport at \code{T_leaf} (\eqn{\mu}mol CO2) / (m\eqn{^2} s) \cr
-#' \code{K_C} \tab Michaelis constant for carboxylation at \code{T_leaf} (\eqn{\mu}mol / mol) \cr
-#' \code{K_O} \tab Michaelis constant for oxygenation at \code{T_leaf}(\eqn{\mu}mol / mol) \cr
-#' \code{R_d} \tab nonphotorespiratory CO2 release at \code{T_leaf} (\eqn{\mu}mol CO2 / (m\eqn{^2} s)) \cr
-#' \code{V_cmax} \tab maximum rate of carboxylation at \code{T_leaf} (\eqn{\mu}mol CO2 / (m\eqn{^2} s)) \cr
-#' \code{V_tpu} \tab rate of triose phosphate utilisation at \code{T_leaf} (\eqn{\mu}mol CO2 / (m\eqn{^2} s)) \cr
-#' \cr
 #' \bold{Output:} \tab \cr
 #' \cr
 #' \code{A} \tab photosynthetic rate at \code{C_chl} (\eqn{\mu}mol CO2 / (m\eqn{^2} s)) \cr
 #' \code{C_chl} \tab chloroplastic CO2 concentration where \code{A_supply} intersects \code{A_demand} (Pa) \cr
-#' \code{g_tc} \tab total conductance to CO2 at \code{T_leaf} (\eqn{\mu}mol CO2 / (m\eqn{^2} s Pa)) \cr
+#' \code{g_tc} \tab total conductance to CO2 at \code{T_leaf} (\eqn{\mu}mol CO2 / (m\eqn{^2} s)) \cr
 #' \code{value} \tab \code{A_supply} - \code{A_demand} (\eqn{\mu}mol / (m\eqn{^2} s)) at \code{C_chl} \cr
 #' \code{convergence} \tab convergence code (0 = converged)
 #' }
@@ -81,17 +56,17 @@
 #' @examples
 #' # Single parameter set with 'photo'
 #'
-#' bake_par <- make_bakepar()
-#' constants <- make_constants(use_tealeaves = FALSE)
-#' enviro_par <- make_enviropar(use_tealeaves = FALSE)
-#' leaf_par <- make_leafpar(use_tealeaves = FALSE)
+#' bake_par = make_bakepar()
+#' constants = make_constants(use_tealeaves = FALSE)
+#' enviro_par = make_enviropar(use_tealeaves = FALSE)
+#' leaf_par = make_leafpar(use_tealeaves = FALSE)
 #' photo(leaf_par, enviro_par, bake_par, constants,
 #'   use_tealeaves = FALSE
 #' )
 #'
 #' # Multiple parameter sets with 'photosynthesis'
 #'
-#' leaf_par <- make_leafpar(
+#' leaf_par = make_leafpar(
 #'   replace = list(
 #'     T_leaf = set_units(c(293.14, 298.15), "K")
 #'   ), use_tealeaves = FALSE
@@ -102,189 +77,198 @@
 #' @encoding UTF-8
 #'
 #' @export
-#'
+#' @md
 
-photosynthesis <- function(leaf_par, enviro_par, bake_par, constants,
-                           use_tealeaves, progress = TRUE, quiet = FALSE,
-                           assert_units = TRUE, parallel = FALSE) {
-  T_air <- NULL
+photosynthesis = function(
+    leaf_par, 
+    enviro_par, 
+    bake_par, 
+    constants,
+    use_tealeaves, 
+    progress = TRUE, 
+    quiet = FALSE,
+    assert_units = TRUE, 
+    check = TRUE,
+    parallel = FALSE,
+    use_legacy_version = FALSE
+) {
+  
+  # Check arguments ----
+  checkmate::assert_flag(check)
+  
+  if (check) {
+    checkmate::assert_class(bake_par, "bake_par")
+    checkmate::assert_class(constants, "constants")
+    checkmate::assert_class(enviro_par, "enviro_par")
+    checkmate::assert_class(leaf_par, "leaf_par")
+    checkmate::assert_flag(use_tealeaves)
+    checkmate::assert_flag(quiet)
+    checkmate::assert_flag(assert_units)
+    checkmate::assert_flag(parallel)
+    checkmate::assert_flag(use_legacy_version)
+  }
+  
+  # Message about legacy version ----
+  notify_users(quiet = quiet, leaf_par = leaf_par)
+  
+  T_air = NULL
   if (!use_tealeaves && !is.null(enviro_par$T_air)) {
     if (!quiet) {
       message(glue::glue("Both air and leaf temperature are provided and fixed: T_air = {T_air}; T_leaf = {T_leaf}",
-        T_air = enviro_par$T_air,
-        T_leaf = leaf_par$T_leaf
+                         T_air = enviro_par$T_air,
+                         T_leaf = leaf_par$T_leaf
       ))
     }
-    T_air <- enviro_par$T_air
+    T_air = enviro_par$T_air
   }
-
+  
   # Assert units ----
   if (assert_units) {
     bake_par %<>% photosynthesis::bake_par()
     constants %<>% photosynthesis::constants(use_tealeaves)
     enviro_par %<>% photosynthesis::enviro_par(use_tealeaves)
     leaf_par %<>% photosynthesis::leaf_par(use_tealeaves)
-    if (!is.null(T_air)) enviro_par$T_air <- set_units(T_air, K)
+    if (!is.null(T_air)) enviro_par$T_air = set_units(T_air, K)
   }
-
-  pars <- c(leaf_par, enviro_par)
-
-  tsky_function <- NULL
-  if (is.function(pars$T_sky)) {
-    tsky_function <- pars$T_sky
-    pars$T_sky <- NULL
-  }
-
-  # Capture units ----
-  par_units <- purrr::map(pars, units) %>%
-    magrittr::set_names(names(pars))
-  if (!is.null(T_air)) {
-    par_units$T_air <- units(enviro_par$T_air)
-  } else {
-    if (!use_tealeaves) par_units$T_air <- units(leaf_par$T_leaf)
-  }
-
+  
   # Make parameter sets ----
-  ## cross_df() removes units.
-  ## This code will cause errors if units are not properly set
-  pars %<>% purrr::cross_df()
-
-  # Calculate T_leaf using energy balance or set to T_air ----
-  if (use_tealeaves) {
-
-    # This is an inefficient hack
-    E_q <- pars$E_q
-    PPFD <- pars$PPFD
-    f_par <- pars$f_par
-    g_sc <- pars$g_sc
-    g_uc <- pars$g_uc
-
-    units(E_q) <- par_units$E_q
-    units(PPFD) <- par_units$PPFD
-    units(f_par) <- par_units$f_par
-    units(g_sc) <- par_units$g_sc
-    units(g_uc) <- par_units$g_uc
-
-    pars$S_sw <- set_units(E_q * PPFD / f_par, W / m^2)
-    pars$g_sw <- set_units(
-      constants$D_w0 / constants$D_c0 * g_sc,
-      umol / m^2 / Pa / s
-    )
-    pars$g_uw <- set_units(
-      constants$D_w0 / constants$D_c0 * g_uc,
-      umol / m^2 / Pa / s
-    )
-    pars$logit_sr <- stats::qlogis(pars$k_sc / (1 + pars$k_sc))
-
-    par_units$S_sw <- units(units::make_units(W / m^2))
-    par_units$g_sw <- par_units$g_sc
-    par_units$g_uw <- par_units$g_uc
-    par_units$logit_sr <- par_units$k_sc
-
-    pars$S_sw %<>% drop_units()
-    pars$g_sw %<>% drop_units()
-    pars$g_uw %<>% drop_units()
-
-    tlp <- pars %>%
-      as.list() %>%
-      purrr::map(unique) %>%
-      tealeaves::leaf_par()
-
-    tep <- pars %>%
-      as.list() %>%
-      purrr::map(unique)
-
-    if (!is.null(tsky_function)) {
-      tep$T_sky <- tsky_function
-    }
-
-    tep %<>% tealeaves::enviro_par()
-
-    tcs <- tealeaves::constants(constants)
-
-    tl <- tealeaves::tleaves(tlp, tep, tcs,
-      progress = FALSE, quiet = TRUE,
-      set_units = FALSE, parallel = parallel
-    )
-
-    par_units$T_leaf <- units(tl$T_leaf)
-
-    tl <- tl %>% dplyr::rename(
-      tealeaves_convergence = .data$convergence,
-      tealeaves_value = .data$value
-    )
-
-    ## Drop units and join
-    suppressMessages(
-      pars %<>% dplyr::full_join(dplyr::mutate_if(
-        tl, ~ is(.x, "units"),
-        drop_units
-      ))
-    )
-  } else {
-    if (is.null(T_air)) pars$T_air <- pars$T_leaf
-  }
-
-  # Simulate ----
-  soln <- find_As(
-    pars, bake_par, constants, par_units, progress, quiet,
-    parallel
+  pars = make_parameter_sets(leaf_par, enviro_par, bake_par, constants)
+  
+  # Solve ----
+  soln = solve_for_photosynthesis(
+    pars,
+    bake_par, 
+    constants, 
+    use_tealeaves,
+    progress,
+    quiet,
+    parallel,
+    use_legacy_version
   )
-
+  
   # Return ----
   soln
+  
 }
 
-find_As <- function(par_sets, bake_par, constants, par_units, progress, quiet,
-                    parallel) {
+#' Make parameter sets for \code{\link{photosynthesis}}
+#' @inheritParams photosynthesis
+#' @noRd
+make_parameter_sets = function(
+    leaf_par, 
+    enviro_par, 
+    bake_par, 
+    constants
+) {
+  
+  ## cross_df() removes units
+  pars = c(
+    purrr::keep(leaf_par, ~ length(.x) > 0), 
+    purrr::keep(enviro_par, ~ length(.x) > 0)
+  ) |>
+    purrr::map(~ {if (is.function(.x)) {list(.x)} else {.x}}) |>
+    purrr::cross_df()
+  
+  ## Add units back
+  function_pars = apply(pars, 2, function(.x) any(sapply(.x, is.function)))
+  function_par_cols = pars[, function_pars]
+  pars = pars %>% 
+    set_parameter_units(.data$R %in% colnames(.)[!function_pars]) |>
+    tibble::as_tibble() |>
+    dplyr::bind_cols(function_par_cols)
+  
+  pars
+  
+}
+
+#' Solve for C_chl and A for each parameter set within \code{\link{photosynthesis}}
+#' @inheritParams photosynthesis
+#' @noRd
+solve_for_photosynthesis = function(
+    pars,
+    bake_par, 
+    constants, 
+    use_tealeaves,
+    progress,
+    quiet,
+    parallel,
+    use_legacy_version
+) {
+  
   if (!quiet) {
     glue::glue("\nSolving for photosynthetic rate from {n} parameter set{s} ...",
-      n = nrow(par_sets), s = dplyr::if_else(length(par_sets) > 1, "s", "")
+               n = nrow(pars), s = dplyr::if_else(length(pars) > 1, "s", "")
     ) %>%
       crayon::green() %>%
       message(appendLF = FALSE)
   }
-
-  if (progress && !parallel) pb <- dplyr::progress_estimated(nrow(par_sets))
-
-  soln <- suppressWarnings(
-    par_sets %>%
-      as.list() %>%
-      purrr::transpose() %>%
-      furrr::future_map_dfr(~ {
-        ret <- photosynthesis::photo(
-          leaf_par = .x, enviro_par = .x, bake_par = bake_par,
-          constants = constants, use_tealeaves = FALSE, quiet = TRUE,
-          assert_units = FALSE, check = FALSE, prepare_for_tleaf = FALSE
-        )
-        if (progress && !parallel) pb$tick()$print()
-        ret
-      }, .progress = progress) %>%
-      dplyr::select_at(
-        dplyr::vars(-tidyselect::one_of(stringr::str_c(colnames(.), "1")))
+  
+  if (progress && !parallel) pb = dplyr::progress_estimated(nrow(pars))
+  
+  soln = if (parallel) {
+    pars %>%
+      split(~ seq_len(nrow(.))) |>
+      furrr::future_map_dfr(
+        solve_for_photosynthesis_set, 
+        bake_par = bake_par,
+        constants = constants,
+        use_tealeaves = use_tealeaves,
+        use_legacy_version = use_legacy_version,
+        .progress = progress
       )
-  )
-
-  # Reassign units ----
-  soln_env <- environment()
-  colnames(soln) %>%
-    glue::glue("units(soln${x}) <- par_units${x}", x = .) %>%
-    parse(text = .) %>%
-    eval(envir = soln_env)
-
-  soln %>%
-    dplyr::select(tidyselect::ends_with("25")) %>%
-    colnames() %>%
-    stringr::str_remove("25$") %>%
-    glue::glue("units(soln${x}) <- par_units${x}25", x = .) %>%
-    parse(text = .) %>%
-    eval(envir = soln_env)
-
-  soln$C_chl %<>% set_units(Pa)
-  soln$g_tc %<>% set_units(umol / m^2 / s / Pa)
-  soln$A %<>% set_units(umol / m^2 / s)
-
+  } else {
+    pars %>%
+      split(~ seq_len(nrow(.))) |>
+      purrr::map_dfr(~ {
+        ret = solve_for_photosynthesis_set(
+          pars = .x,
+          bake_par = bake_par,
+          constants = constants,
+          use_tealeaves = use_tealeaves,
+          use_legacy_version = use_legacy_version
+        )
+        if (progress) pb$tick()$print()
+        ret
+      })
+    }
+  
   soln
+  
+}
+
+#' Solve for C_chl and A for a single parameter set within \code{\link{photosynthesis}}
+#' @inheritParams photosynthesis
+#' @noRd
+solve_for_photosynthesis_set = function(
+    pars,
+    bake_par, 
+    constants, 
+    use_tealeaves,
+    use_legacy_version
+) {
+  
+  lx = intersect(
+    colnames(pars), 
+    parameter_names("leaf", use_tealeaves = use_tealeaves)
+  )
+  
+  ex = intersect(
+    colnames(pars),
+    parameter_names("enviro", use_tealeaves = use_tealeaves)
+  )
+  
+  # This would cause an error is element was list with multiple elements,
+  # but this structure shouldn't occur by this point
+  lp = as.list(pars)[lx] |>
+    lapply(function(.x) if (is.list(.x)) {.x[[1]]} else .x)
+  
+  ep = as.list(pars)[ex] |>
+    lapply(function(.x) if (is.list(.x)) {.x[[1]]} else .x)
+
+  photo(lp, ep, bake_par, constants, use_tealeaves, quiet = TRUE,
+        assert_units = FALSE, check = FALSE,
+        use_legacy_version = use_legacy_version)
+  
 }
 
 #' Simulate C3 photosynthesis
@@ -297,11 +281,21 @@ find_As <- function(par_sets, bake_par, constants, par_units, progress, quiet,
 #'
 #' @export
 
-photo <- function(leaf_par, enviro_par, bake_par, constants,
-                  use_tealeaves, quiet = FALSE, assert_units = TRUE,
-                  check = TRUE, prepare_for_tleaf = use_tealeaves) {
+photo = function(
+    leaf_par, 
+    enviro_par, 
+    bake_par, 
+    constants,
+    use_tealeaves, 
+    quiet = FALSE, 
+    assert_units = TRUE,
+    check = TRUE, 
+    prepare_for_tleaf = use_tealeaves,
+    use_legacy_version = FALSE
+  ) {
+  
+  # Check arguments ----
   checkmate::assert_flag(check)
-  checkmate::assert_flag(prepare_for_tleaf)
 
   if (check) {
     checkmate::assert_class(bake_par, "bake_par")
@@ -311,9 +305,14 @@ photo <- function(leaf_par, enviro_par, bake_par, constants,
     checkmate::assert_flag(use_tealeaves)
     checkmate::assert_flag(quiet)
     checkmate::assert_flag(assert_units)
+    checkmate::assert_flag(prepare_for_tleaf)
+    checkmate::assert_flag(use_legacy_version)
   }
 
-  T_air <- NULL
+  # Message about legacy version ----
+  notify_users(quiet = quiet, leaf_par = leaf_par)
+  
+  T_air = NULL
   if (!use_tealeaves && !is.null(enviro_par$T_air)) {
     if (!quiet) {
       message(glue::glue("Both air and leaf temperature are provided and fixed: T_air = {T_air}; T_leaf = {T_leaf}",
@@ -321,7 +320,7 @@ photo <- function(leaf_par, enviro_par, bake_par, constants,
         T_leaf = leaf_par$T_leaf
       ))
     }
-    T_air <- enviro_par$T_air
+    T_air = enviro_par$T_air
   }
 
   # Set units and bake ----
@@ -330,46 +329,22 @@ photo <- function(leaf_par, enviro_par, bake_par, constants,
     constants %<>% photosynthesis::constants(use_tealeaves)
     enviro_par %<>% photosynthesis::enviro_par(use_tealeaves)
     leaf_par %<>% photosynthesis::leaf_par(use_tealeaves)
-    if (!is.null(T_air)) enviro_par$T_air <- set_units(T_air, K)
+    if (!is.null(T_air)) enviro_par$T_air = set_units(T_air, K)
   }
 
   # Calculate T_leaf using energy balance ----
   if (use_tealeaves) {
-    if (prepare_for_tleaf) {
-      enviro_par$S_sw <- set_units(enviro_par$E_q * enviro_par$PPFD /
-        enviro_par$f_par, W / m^2)
-      leaf_par$g_sw <- set_units(
-        constants$D_w0 / constants$D_c0 * leaf_par$g_sc,
-        umol / m^2 / Pa / s
-      )
-      leaf_par$g_uw <- set_units(
-        constants$D_w0 / constants$D_c0 * leaf_par$g_uc,
-        umol / m^2 / Pa / s
-      )
-      leaf_par$logit_sr <- stats::qlogis(leaf_par$k_sc / (set_units(1) +
-        leaf_par$k_sc))
-    }
-
-    tl <- tealeaves::tleaf(
-      leaf_par = leaf_par, enviro_par = enviro_par,
-      constants = constants, quiet = TRUE,
-      set_units = TRUE
-    )
-    tl <- tl %>% dplyr::rename(
-      tealeaves_convergence = .data$convergence,
-      tealeaves_value = .data$value
-    )
-    leaf_par$T_leaf <- tl$T_leaf
+    leaf_par %<>% add_Tleaf_photo(enviro_par, constants, prepare_for_tleaf)
   }
+  
+  leaf_par %<>% bake(enviro_par, bake_par, constants, assert_units = FALSE)
 
-  leaf_par %<>% bake(bake_par, constants, assert_units = FALSE)
-
-  pars <- c(leaf_par, enviro_par, constants) %>%
+  pars = c(leaf_par, enviro_par, constants) %>%
     purrr::map_if(~ inherits(.x, "units"), drop_units)
-  if (!use_tealeaves && is.null(pars$T_air)) pars$T_air <- pars$T_leaf
+  if (!use_tealeaves && is.null(pars$T_air)) pars$T_air = pars$T_leaf
 
   # Find intersection between photosynthetic supply and demand curves -----
-  soln <- find_A(pars, quiet)
+  soln = find_A(pars, quiet, use_legacy_version)
 
   # Check results -----
   if (soln$convergence == 1) {
@@ -383,47 +358,124 @@ photo <- function(leaf_par, enviro_par, bake_par, constants,
   # are both passed from pars = c(leaf_par, enviro_par), so they have redundant
   # information. This checks that everything is identical, then gets rid of
   # redundant parameters.
-  shared_pars <- intersect(names(leaf_par), names(enviro_par))
+  shared_pars = intersect(names(leaf_par), names(enviro_par))
   checkmate::assert_true(all(unlist(leaf_par[shared_pars]) ==
     unlist(enviro_par[shared_pars])))
-  leaf_par[shared_pars] <- NULL
+  leaf_par[shared_pars] = NULL
 
-  soln %<>%
-    dplyr::bind_cols(as.data.frame(leaf_par)) %>%
-    dplyr::bind_cols(as.data.frame(enviro_par))
-
-  soln$C_chl %<>% set_units(Pa)
-  soln$g_tc %<>% set_units(umol / m^2 / s / Pa)
+  soln = c(
+    soln,
+    purrr::keep(leaf_par, ~ length(.x) > 0 & !is.function(.x)),
+    purrr::keep(enviro_par, ~ length(.x) > 0 & !is.function(.x)),
+    purrr::keep(bake_par, ~ length(.x) > 0 & !is.function(.x)),
+    purrr::keep(constants, ~ length(.x) > 0 & !is.function(.x))
+  ) |>
+    as.data.frame()
+  
+  soln$C_chl %<>% set_units(umol / mol)
+  soln$g_tc %<>% set_units(mol / m^2 / s)
   soln$A %<>% set_units(umol / m^2 / s)
 
   soln
+  
 }
 
-find_A <- function(unitless_pars, quiet) {
-  .f <- function(C_chl, unitless_pars) {
-    A_supply(C_chl, unitless_pars, unitless = TRUE) -
-      A_demand(C_chl, unitless_pars, unitless = TRUE)
+#' Calculate leaf temperature using \code{\link[tealeaves]{tleaf}}
+#' @inheritParams photo
+#' @noRd
+add_Tleaf_photo = function(leaf_par, enviro_par, constants, prepare_for_tleaf) {
+  
+  leaf_par1 = leaf_par
+  constants1 = constants
+  
+  if (prepare_for_tleaf) {
+    enviro_par$S_sw = set_units(enviro_par$E_q * enviro_par$PPFD /
+                                  enviro_par$f_par, W / m^2)
+    leaf_par$g_sw = set_units(
+      constants$D_w0 / constants$D_c0 * leaf_par$g_sc,
+      mol / m^2 / s
+    )
+    leaf_par$g_uw = set_units(
+      constants$D_w0 / constants$D_c0 * leaf_par$g_uc,
+      mol / m^2 / s
+    )
+    
+    leaf_par$logit_sr = if (is(leaf_par$k_sc, "units")) {
+      stats::qlogis(leaf_par$k_sc / (set_units(1) + leaf_par$k_sc))
+    } else {
+      stats::qlogis(leaf_par$k_sc / (1 + leaf_par$k_sc))
+    }
+    
+    # Need this until tealeaves changes these parameters for consistency
+    leaf_par1$g_sw = if (is(leaf_par$g_sw, "units")) {
+      leaf_par$g_sw |>
+        gunit::convert_conductance(P = enviro_par$P, R = constants$R) |>
+        magrittr::extract2("umol/m^2/s/Pa")
+    } else {
+      leaf_par$g_sw / enviro_par$P * 1000
+    }
+    
+    leaf_par1$g_uw = if (is(leaf_par$g_uw, "units")) {
+      leaf_par$g_uw |>
+        gunit::convert_conductance(P = enviro_par$P, R = constants$R) |>
+        magrittr::extract2("umol/m^2/s/Pa")
+    } else {
+      leaf_par$g_uw / enviro_par$P * 1000
+    }
+    
+    
+    constants1$nu_constant = constants$f_nu
+    constants1$sh_constant = constants$f_sh
+    constants1$f_nu = constants1$f_sh = NULL
+    constants1$s = constants1$sigma
+    constants1$sigma = NULL
   }
+  
+  tl = tealeaves::tleaf(
+    leaf_par = leaf_par1, 
+    enviro_par = enviro_par,
+    constants = constants1, 
+    quiet = TRUE,
+    set_units = TRUE
+  ) %>% 
+    dplyr::rename(
+      tealeaves_convergence = .data$convergence,
+      tealeaves_value = .data$value
+    )
+  leaf_par$T_leaf = tl$T_leaf
 
-  if (!quiet) {
+  leaf_par
+  
+}
+
+supply_minus_demand = function(C_chl, unitless_pars, use_legacy_version) {
+  supply = A_supply(C_chl, unitless_pars, unitless = TRUE, use_legacy_version)
+  demand = A_demand(C_chl, unitless_pars, unitless = TRUE)
+  supply - demand
+}
+
+find_A = function(unitless_pars, quiet, use_legacy_version) {
+
+    if (!quiet) {
     "\nSolving for C_chl ..." %>%
       crayon::green() %>%
       message(appendLF = FALSE)
   }
 
-  fit <- tryCatch(
+  fit = tryCatch(
     {
-      stats::uniroot(.f,
+      stats::uniroot(supply_minus_demand,
         unitless_pars = unitless_pars, lower = 0.1,
-        upper = max(c(10, unitless_pars$C_air)), check.conv = TRUE
+        upper = max(c(10, unitless_pars$C_air)), check.conv = TRUE,
+        use_legacy_version = use_legacy_version
       )
     },
     finally = {
-      fit <- list(root = NA, f.root = NA, convergence = 1)
+      fit = list(root = NA, f.root = NA, convergence = 1)
     }
   )
 
-  soln <- data.frame(
+  soln = data.frame(
     C_chl = fit$root, value = fit$f.root,
     convergence = dplyr::if_else(is.null(fit$convergence), 0, 1)
   )
@@ -434,8 +486,9 @@ find_A <- function(unitless_pars, quiet) {
       message()
   }
 
-  soln$g_tc <- .get_gtc(unitless_pars, unitless = TRUE)
-  soln$A <- A_supply(soln$C_chl, unitless_pars, unitless = TRUE)
+  soln$g_tc = .get_gtc(unitless_pars, unitless = TRUE, use_legacy_version)
+  soln$A = A_supply(soln$C_chl, unitless_pars, unitless = TRUE,
+                    use_legacy_version)
 
   soln
 }
@@ -443,7 +496,9 @@ find_A <- function(unitless_pars, quiet) {
 #' CO2 supply and demand function (mol / m^2 s)
 #'
 #' This function is not intended to be called by users directly.
-#'
+#' 
+#' @inheritParams photosynthesis
+#' 
 #' @param C_chl Chloroplastic CO2 concentration in Pa of class \code{units}
 #' @param pars Concatenated parameters (\code{leaf_par}, \code{enviro_par}, and \code{constants})
 #' @param unitless Logical. Should \code{units} be set? The function is faster when FALSE, but input must be in correct units or else results will be incorrect without any warning.
@@ -471,30 +526,30 @@ find_A <- function(unitless_pars, quiet) {
 #' }
 #'
 #' @examples
-#' bake_par <- make_bakepar()
-#' constants <- make_constants(use_tealeaves = FALSE)
-#' enviro_par <- make_enviropar(use_tealeaves = FALSE)
-#' leaf_par <- make_leafpar(use_tealeaves = FALSE)
-#' leaf_par <- bake(leaf_par, bake_par, constants)
+#' bake_par = make_bakepar()
+#' constants = make_constants(use_tealeaves = FALSE)
+#' enviro_par = make_enviropar(use_tealeaves = FALSE)
+#' leaf_par = make_leafpar(use_tealeaves = FALSE)
+#' leaf_par = bake(leaf_par, enviro_par, bake_par, constants)
 #' # Or bake with piping (need library(magrittr))
-#' # leaf_par %<>% bake(bake_par, constants)
-#' enviro_par$T_air <- leaf_par$T_leaf
+#' # leaf_par %<>% bake(enviro_par, bake_par, constants)
+#' enviro_par$T_air = leaf_par$T_leaf
 #'
-#' pars <- c(leaf_par, enviro_par, constants)
-#' C_chl <- set_units(35, "Pa")
+#' pars = c(leaf_par, enviro_par, constants)
+#' C_chl = set_units(350, umol/mol)
 #'
 #' A_supply(C_chl, pars)
 #'
 #' A_demand(C_chl, pars)
 #' @export
 
-A_supply <- function(C_chl, pars, unitless = FALSE) {
-  g_tc <- .get_gtc(pars, unitless)
+A_supply = function(C_chl, pars, unitless = FALSE, use_legacy_version = FALSE) {
+  g_tc = .get_gtc(pars, unitless, use_legacy_version)
 
   if (unitless) {
-    As <- g_tc * (pars$C_air - C_chl)
+    As = g_tc * (pars$C_air - C_chl)
   } else {
-    As <- set_units(g_tc * (pars$C_air - C_chl), umol / m^2 / s)
+    As = set_units(g_tc * (pars$C_air - C_chl), umol / m^2 / s)
   }
   As
 }
@@ -503,13 +558,58 @@ A_supply <- function(C_chl, pars, unitless = FALSE) {
 #' @rdname A_supply
 #' @export
 
-A_demand <- function(C_chl, pars, unitless = FALSE) {
+A_demand = function(C_chl, pars, unitless = FALSE) {
   if (unitless) {
-    Ad <- (1 - pars$gamma_star / C_chl) * FvCB(C_chl, pars, unitless)$A - pars$R_d
+    Ad = (1 - pars$gamma_star / C_chl) * FvCB(C_chl, pars, unitless)$A - pars$R_d
   } else {
-    Ad <- set_units((set_units(1) - pars$gamma_star / C_chl) *
+    Ad = set_units((set_units(1) - pars$gamma_star / C_chl) *
       FvCB(C_chl, pars, unitless)$A - pars$R_d, umol / m^2 / s)
   }
 
   Ad
+}
+
+#' Check whether users supplied parameters to calculate g_ias and g_liq
+#' @noRd
+check_new_conductance = function(pars, baked) {
+  checkmate::assert_flag(baked)
+  if (baked) {
+    c("g_iasc_lower", "g_iasc_upper", "A_mes_A", "g_liqc") |>
+      purrr::map_lgl(function(.x, pars) {
+        length(pars[[.x]]) > 0 & all(!is.na(pars[[.x]]))
+      }, pars = pars) |>
+      all()
+  } else {
+    c("delta_ias_lower", "delta_ias_upper", "A_mes_A", "g_liqc25") |>
+      purrr::map_lgl(function(.x, pars) {
+        length(pars[[.x]]) > 0 & all(!is.na(pars[[.x]]))
+      }, pars = pars) |>
+      all()
+  }
+  
+}
+
+#' Notify users about important changes in \link[photosyntesis]
+#' @noRd
+notify_users = function(quiet, leaf_par) {
+  
+  if (!quiet) {
+    message("
+            
+  As of version 2.1.0, the CO2 conductance model changed slightly. 
+  To implement legacy version, use:
+  
+  `> photosynthesis(..., use_legacy_version = TRUE)`.")
+    
+    if (check_new_conductance(leaf_par, baked = FALSE)) {
+      message("
+  It looks like you provided parameters to calculate g_ias and g_liq.
+  The parameters g_mc and k_mc will be ignored and calculated from g_ias 
+  and g_liq. This is a new feature in version 2.1.0 and may change in the
+  near future. Inspect results carefully.
+  ")
+    }
+    
+  }
+  
 }

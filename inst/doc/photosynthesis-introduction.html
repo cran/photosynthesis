@@ -12,7 +12,7 @@
 
 <meta name="author" content="Chris Muir" />
 
-<meta name="date" content="2022-08-11" />
+<meta name="date" content="2022-11-08" />
 
 <title>Introduction to the photosynthesis package</title>
 
@@ -31,23 +31,23 @@ document.addEventListener('DOMContentLoaded', function(e) {
 </script>
 
 <style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
 
 
 
 <style type="text/css">
-  code {
-    white-space: pre;
-  }
-  .sourceCode {
-    overflow: visible;
-  }
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
@@ -65,55 +65,54 @@ pre > code.sourceCode { white-space: pre-wrap; }
 pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
-  { counter-reset: source-line 0; }
+{ counter-reset: source-line 0; }
 pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
+{ position: relative; left: -4em; counter-increment: source-line; }
 pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
 div.sourceCode
-  {   }
+{ }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
 </style>
 <script>
 // apply pandoc div.sourceCode style to pre.sourceCode instead
@@ -122,13 +121,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -335,7 +341,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h1 class="title toc-ignore">Introduction to the photosynthesis
 package</h1>
 <h4 class="author">Chris Muir</h4>
-<h4 class="date">2022-08-11</h4>
+<h4 class="date">2022-11-08</h4>
 
 
 
@@ -368,25 +374,39 @@ functions and <code>photo()</code>.</p>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Leaving the make_* functions empty will automatically default to defaults</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># parameters.</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>bake_par   <span class="ot">&lt;-</span> <span class="fu">make_bakepar</span>()                       <span class="co"># temperature response parameters</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>constants  <span class="ot">&lt;-</span> <span class="fu">make_constants</span>(<span class="at">use_tealeaves =</span> <span class="cn">FALSE</span>) <span class="co"># physical constants</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>leaf_par   <span class="ot">&lt;-</span> <span class="fu">make_leafpar</span>(<span class="at">use_tealeaves =</span> <span class="cn">FALSE</span>)   <span class="co"># leaf parameters</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>enviro_par <span class="ot">&lt;-</span> <span class="fu">make_enviropar</span>(<span class="at">use_tealeaves =</span> <span class="cn">FALSE</span>) <span class="co"># environmental parameters</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>bake_par   <span class="ot">=</span> <span class="fu">make_bakepar</span>()                       <span class="co"># temperature response parameters</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>constants  <span class="ot">=</span> <span class="fu">make_constants</span>(<span class="at">use_tealeaves =</span> <span class="cn">FALSE</span>) <span class="co"># physical constants</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>leaf_par   <span class="ot">=</span> <span class="fu">make_leafpar</span>(<span class="at">use_tealeaves =</span> <span class="cn">FALSE</span>)   <span class="co"># leaf parameters</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>enviro_par <span class="ot">=</span> <span class="fu">make_enviropar</span>(<span class="at">use_tealeaves =</span> <span class="cn">FALSE</span>) <span class="co"># environmental parameters</span></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">photo</span>(leaf_par, enviro_par, bake_par, constants, <span class="at">quiet =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">use_tealeaves =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           C_chl        value convergence                     g_tc</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 24.52925 [Pa] -1.09648e-06           0 1.668765 [umol/Pa/m^2/s]</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                       A            g_mc25              g_sc                g_uc</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 27.48581 [umol/m^2/s] 4 [umol/Pa/m^2/s] 4 [umol/Pa/m^2/s] 0.1 [umol/Pa/m^2/s]</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   gamma_star25          J_max25       K_C25        K_O25  k_mc  k_sc  k_uc</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1   3.743 [Pa] 200 [umol/m^2/s] 27.238 [Pa] 16.582 [kPa] 1 [1] 1 [1] 1 [1]</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   leafsize     phi_J          R_d25     T_leaf   theta_J         V_cmax25</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  0.1 [m] 0.331 [1] 2 [umol/m^2/s] 298.15 [K] 0.825 [1] 150 [umol/m^2/s]</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            V_tpu25 g_mc gamma_star J_max    K_C    K_O R_d V_cmax V_tpu   C_air</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 200 [umol/m^2/s]    4      3.743   200 27.238 16.582   2    150   200 41 [Pa]</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                O              P              PPFD      RH    wind</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 21.27565 [kPa] 101.3246 [kPa] 1500 [umol/m^2/s] 0.5 [1] 2 [m/s]</span></span></code></pre></div>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                 C_chl         value convergence                  g_tc</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 258.1218 [umol/mol] -1.363227e-06           0 0.1726157 [mol/m^2/s]</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                       A            J_max          J_max25              K_C</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 27.94273 [umol/m^2/s] 200 [umol/m^2/s] 200 [umol/m^2/s] 268.3 [umol/mol]</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              K_C25                 K_O               K_O25            R_d</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 268.3 [umol/mol] 165084.2 [umol/mol] 165084.2 [umol/mol] 2 [umol/m^2/s]</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            R_d25     T_leaf           V_cmax         V_cmax25            V_tpu</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 2 [umol/m^2/s] 298.15 [K] 150 [umol/m^2/s] 150 [umol/m^2/s] 200 [umol/m^2/s]</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            V_tpu25            g_mc          g_mc25            g_sc</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 200 [umol/m^2/s] 0.4 [mol/m^2/s] 0.4 [mol/m^2/s] 0.4 [mol/m^2/s]</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;               g_uc         gamma_star       gamma_star25  k_mc  k_sc  k_uc</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 0.01 [mol/m^2/s] 37.9258 [umol/mol] 37.9258 [umol/mol] 1 [1] 1 [1] 1 [1]</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   leafsize     phi_J   theta_J          C_air              O              P</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  0.1 [m] 0.331 [1] 0.825 [1] 420 [umol/mol] 0.21 [mol/mol] 101.3246 [kPa]</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                PPFD      RH    wind          Ds_Jmax           Ds_gmc</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 1500 [umol/m^2/s] 0.5 [1] 2 [m/s] 388.04 [J/K/mol] 487.29 [J/K/mol]</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            Ea_Jmax            Ea_KC            Ea_KO            Ea_Rd</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 56095.18 [J/mol] 80989.78 [J/mol] 23719.97 [J/mol] 40446.75 [J/mol]</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           Ea_Vcmax          Ea_Vtpu     Ea_gammastar           Ea_gmc</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 52245.78 [J/mol] 52245.78 [J/mol] 24459.97 [J/mol] 68901.56 [J/mol]</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            Ed_Jmax           Ed_gmc             D_c0            D_h0</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 121244.8 [J/mol] 148788.6 [J/mol] 1.29e-05 [m^2/s] 1.9e-05 [m^2/s]</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;               D_m0             D_w0           G                 R       eT</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 1.33e-05 [m^2/s] 2.12e-05 [m^2/s] 9.8 [m/s^2] 8.31446 [J/K/mol] 1.75 [1]</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     epsilon                sigma</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 0.622 [1] 5.67e-08 [W/K^4/m^2]</span></span></code></pre></div>
 </div>
 <div id="replace-default-parameters" class="section level2">
 <h2>Replace default parameters</h2>
@@ -402,31 +422,31 @@ values over which to solve for leaf temperature.</p>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># for all parameter names and proper units.</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Temperature response parameters can be updated (but we won&#39;t do that here)</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>bake_par <span class="ot">&lt;-</span> <span class="fu">make_bakepar</span>()</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>bake_par <span class="ot">=</span> <span class="fu">make_bakepar</span>()</span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Physical constants probably do not need to be replaced in most cases,</span></span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># that&#39;s why we call them &#39;constants&#39;!</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>constants  <span class="ot">&lt;-</span> <span class="fu">make_constants</span>(<span class="at">use_tealeaves =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>constants  <span class="ot">=</span> <span class="fu">make_constants</span>(<span class="at">use_tealeaves =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># First, we&#39;ll change photosynthetic photon flux density to 1000 umol / (m^2 s)</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>enviro_par <span class="ot">&lt;-</span> <span class="fu">make_enviropar</span>(</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>enviro_par <span class="ot">=</span> <span class="fu">make_enviropar</span>(</span>
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">replace =</span> <span class="fu">list</span>(</span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">PPFD =</span> <span class="fu">set_units</span>(<span class="dv">1000</span>, <span class="st">&quot;umol/m^2/s&quot;</span>)</span>
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    ), <span class="at">use_tealeaves =</span> <span class="cn">FALSE</span></span>
 <span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Next, we&#39;ll change stomatal conductance to 3 umol / (m^2 s Pa)</span></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>leaf_par <span class="ot">&lt;-</span> <span class="fu">make_leafpar</span>(</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Next, we&#39;ll change stomatal conductance to 0.3 mol / m^2 / s.</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>leaf_par <span class="ot">=</span> <span class="fu">make_leafpar</span>(</span>
 <span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">replace =</span> <span class="fu">list</span>(</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">g_sc =</span> <span class="fu">set_units</span>(<span class="dv">3</span>, <span class="st">&quot;umol/m^2/s/Pa&quot;</span>)</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">g_sc =</span> <span class="fu">set_units</span>(<span class="fl">0.3</span>, mol <span class="sc">/</span> m<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> s)</span>
 <span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    ), <span class="at">use_tealeaves =</span> <span class="cn">FALSE</span></span>
 <span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>photo <span class="ot">&lt;-</span> <span class="fu">photo</span>(leaf_par, enviro_par, bake_par, constants, <span class="at">quiet =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>               <span class="at">use_tealeaves =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>photo <span class="sc">%&gt;%</span></span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(PPFD, C_chl, A) <span class="sc">%&gt;%</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>photo <span class="sc">|&gt;</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(PPFD, C_chl, A) <span class="sc">|&gt;</span></span>
 <span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code></pre></div>
 <table>
 <thead>
@@ -439,8 +459,8 @@ values over which to solve for leaf temperature.</p>
 <tbody>
 <tr class="odd">
 <td align="right">1000 [umol/m^2/s]</td>
-<td align="right">24.0449 [Pa]</td>
-<td align="right">25.21885 [umol/m^2/s]</td>
+<td align="right">252.6879 [umol/mol]</td>
+<td align="right">25.63373 [umol/m^2/s]</td>
 </tr>
 </tbody>
 </table>
@@ -459,29 +479,29 @@ function to fit all combinations<a href="#fn1" class="footnote-ref" id="fnref1">
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># As before, use the `replace` argument to replace defaults, but this time we</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># enter multiple values</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>bake_par <span class="ot">&lt;-</span> <span class="fu">make_bakepar</span>()</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>constants <span class="ot">&lt;-</span> <span class="fu">make_constants</span>(<span class="at">use_tealeaves =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>bake_par <span class="ot">=</span> <span class="fu">make_bakepar</span>()</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>constants <span class="ot">=</span> <span class="fu">make_constants</span>(<span class="at">use_tealeaves =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># First, we&#39;ll change the PPFD to 1000 and 1500 umol / (m^2 s)</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>enviro_par <span class="ot">&lt;-</span> <span class="fu">make_enviropar</span>(</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>enviro_par <span class="ot">=</span> <span class="fu">make_enviropar</span>(</span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">replace =</span> <span class="fu">list</span>(</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">PPFD =</span> <span class="fu">set_units</span>(<span class="fu">c</span>(<span class="dv">1000</span>, <span class="dv">1500</span>), <span class="st">&quot;umol/m^2/s&quot;</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">PPFD =</span> <span class="fu">set_units</span>(<span class="fu">c</span>(<span class="dv">1000</span>, <span class="dv">1500</span>), umol <span class="sc">/</span> m<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> s)</span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    ), <span class="at">use_tealeaves =</span> <span class="cn">FALSE</span></span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Next, we&#39;ll change stomatal conductance to to 2 and 4 umol / (m^2 s Pa)</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>leaf_par  <span class="ot">&lt;-</span> <span class="fu">make_leafpar</span>(</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Next, we&#39;ll change stomatal conductance to to 0.2 and 0.4 mol / m^2 / s</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>leaf_par  <span class="ot">=</span> <span class="fu">make_leafpar</span>(</span>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">replace =</span> <span class="fu">list</span>(</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">g_sc =</span> <span class="fu">set_units</span>(<span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>), <span class="st">&quot;umol/m^2/s/Pa&quot;</span>)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">g_sc =</span> <span class="fu">set_units</span>(<span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.4</span>), mol <span class="sc">/</span> m<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> s)</span>
 <span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    ), <span class="at">use_tealeaves =</span> <span class="cn">FALSE</span></span>
 <span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Now there should be 4 combinations (high and low g_sc crossed with high and low PPFD)</span></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>ph <span class="ot">&lt;-</span> <span class="fu">photosynthesis</span>(leaf_par, enviro_par, bake_par, constants, </span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>ph <span class="ot">=</span> <span class="fu">photosynthesis</span>(leaf_par, enviro_par, bake_par, constants, </span>
 <span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>                     <span class="at">use_tealeaves =</span> <span class="cn">FALSE</span>, <span class="at">progress =</span> <span class="cn">FALSE</span>, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>ph <span class="sc">%&gt;%</span> </span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(g_sc, PPFD, A) <span class="sc">%&gt;%</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>ph <span class="sc">|&gt;</span> </span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(g_sc, PPFD, A) <span class="sc">|&gt;</span></span>
 <span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code></pre></div>
 <table>
 <thead>
@@ -493,24 +513,24 @@ function to fit all combinations<a href="#fn1" class="footnote-ref" id="fnref1">
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">2 [umol/Pa/m^2/s]</td>
+<td align="right">0.2 [mol/m^2/s]</td>
 <td align="right">1000 [umol/m^2/s]</td>
-<td align="right">23.90532 [umol/m^2/s]</td>
+<td align="right">24.34817 [umol/m^2/s]</td>
 </tr>
 <tr class="even">
-<td align="right">4 [umol/Pa/m^2/s]</td>
+<td align="right">0.4 [mol/m^2/s]</td>
 <td align="right">1000 [umol/m^2/s]</td>
-<td align="right">25.87941 [umol/m^2/s]</td>
+<td align="right">26.27649 [umol/m^2/s]</td>
 </tr>
 <tr class="odd">
-<td align="right">2 [umol/Pa/m^2/s]</td>
+<td align="right">0.2 [mol/m^2/s]</td>
 <td align="right">1500 [umol/m^2/s]</td>
-<td align="right">25.17778 [umol/m^2/s]</td>
+<td align="right">25.68222 [umol/m^2/s]</td>
 </tr>
 <tr class="even">
-<td align="right">4 [umol/Pa/m^2/s]</td>
+<td align="right">0.4 [mol/m^2/s]</td>
 <td align="right">1500 [umol/m^2/s]</td>
-<td align="right">27.48581 [umol/m^2/s]</td>
+<td align="right">27.94273 [umol/m^2/s]</td>
 </tr>
 </tbody>
 </table>
@@ -532,18 +552,18 @@ Here I’ll provide an example simulating an <span class="math inline">\(A-C_c\)
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># We&#39;ll use the `replace` argument to enter multiple atmospheric CO2 concentrations</span></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>bake_par <span class="ot">&lt;-</span> <span class="fu">make_bakepar</span>()</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>constants  <span class="ot">&lt;-</span> <span class="fu">make_constants</span>(<span class="at">use_tealeaves =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>bake_par <span class="ot">=</span> <span class="fu">make_bakepar</span>()</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>constants  <span class="ot">=</span> <span class="fu">make_constants</span>(<span class="at">use_tealeaves =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>enviro_par <span class="ot">&lt;-</span> <span class="fu">make_enviropar</span>(</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>enviro_par <span class="ot">=</span> <span class="fu">make_enviropar</span>(</span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">replace =</span> <span class="fu">list</span>(</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">C_air =</span> <span class="fu">set_units</span>(<span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">200</span>, <span class="at">length.out =</span> <span class="dv">20</span>), <span class="st">&quot;Pa&quot;</span>)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">C_air =</span> <span class="fu">set_units</span>(<span class="fu">seq</span>(<span class="dv">10</span>, <span class="dv">2000</span>, <span class="at">length.out =</span> <span class="dv">20</span>), umol <span class="sc">/</span> mol)</span>
 <span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    ), <span class="at">use_tealeaves =</span> <span class="cn">FALSE</span></span>
 <span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>leaf_par  <span class="ot">&lt;-</span> <span class="fu">make_leafpar</span>(<span class="at">use_tealeaves =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>leaf_par  <span class="ot">=</span> <span class="fu">make_leafpar</span>(<span class="at">use_tealeaves =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>ph <span class="ot">&lt;-</span> <span class="fu">photosynthesis</span>(leaf_par, enviro_par, bake_par, constants, </span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>ph <span class="ot">=</span> <span class="fu">photosynthesis</span>(leaf_par, enviro_par, bake_par, constants, </span>
 <span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>                     <span class="at">use_tealeaves =</span> <span class="cn">FALSE</span>, <span class="at">progress =</span> <span class="cn">FALSE</span>, </span>
 <span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>                     <span class="at">quiet =</span> <span class="cn">TRUE</span>, <span class="at">parallel =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
@@ -554,7 +574,7 @@ Here I’ll provide an example simulating an <span class="math inline">\(A-C_c\)
 <span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>ph <span class="sc">%&lt;&gt;%</span> <span class="fu">mutate_if</span>(<span class="sc">~</span> <span class="fu">is</span>(.x, <span class="st">&quot;units&quot;</span>), drop_units)</span>
 <span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ph, <span class="fu">aes</span>(C_chl, A)) <span class="sc">+</span></span>
 <span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="fu">expression</span>(<span class="fu">paste</span>(C[chl], <span class="st">&quot; [Pa]&quot;</span>))) <span class="sc">+</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="fu">expression</span>(<span class="fu">paste</span>(C[chl], <span class="st">&quot; [ppm]&quot;</span>))) <span class="sc">+</span></span>
 <span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="fu">expression</span>(<span class="fu">paste</span>(<span class="st">&quot;A [&quot;</span>, mu, <span class="st">&quot;mol &quot;</span>, m<span class="sc">^-</span><span class="dv">2</span><span class="sc">~</span>s<span class="sc">^-</span><span class="dv">1</span>, <span class="st">&quot;]&quot;</span>))) <span class="sc">+</span></span>
 <span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
 <span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>  <span class="cn">NULL</span></span></code></pre></div>
@@ -573,21 +593,21 @@ package to calculate leaf temperature using an energy balance model.</p>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># You will need to set use_tealeaves = TRUE when making parameters because additional parameters are needed for tealeaves.</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>bake_par <span class="ot">&lt;-</span> <span class="fu">make_bakepar</span>()</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>constants  <span class="ot">&lt;-</span> <span class="fu">make_constants</span>(<span class="at">use_tealeaves =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>bake_par <span class="ot">=</span> <span class="fu">make_bakepar</span>()</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>constants  <span class="ot">=</span> <span class="fu">make_constants</span>(<span class="at">use_tealeaves =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>enviro_par <span class="ot">&lt;-</span> <span class="fu">make_enviropar</span>(</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>enviro_par <span class="ot">=</span> <span class="fu">make_enviropar</span>(</span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">replace =</span> <span class="fu">list</span>(</span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">T_air =</span> <span class="fu">set_units</span>(<span class="fu">seq</span>(<span class="fl">288.15</span>, <span class="fl">313.15</span>, <span class="dv">1</span>), K)</span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    ), <span class="at">use_tealeaves =</span> <span class="cn">TRUE</span></span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>leaf_par <span class="ot">&lt;-</span> <span class="fu">make_leafpar</span>(<span class="at">replace =</span> <span class="fu">list</span>(</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">g_sc =</span> <span class="fu">set_units</span>(<span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>), umol<span class="sc">/</span>m<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>s<span class="sc">/</span>Pa)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>leaf_par <span class="ot">=</span> <span class="fu">make_leafpar</span>(<span class="at">replace =</span> <span class="fu">list</span>(</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">g_sc =</span> <span class="fu">set_units</span>(<span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.4</span>), mol <span class="sc">/</span> m<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> s)</span>
 <span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    ), <span class="at">use_tealeaves =</span> <span class="cn">TRUE</span></span>
 <span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>ph <span class="ot">&lt;-</span> <span class="fu">photosynthesis</span>(leaf_par, enviro_par, bake_par, constants, </span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>ph <span class="ot">=</span> <span class="fu">photosynthesis</span>(leaf_par, enviro_par, bake_par, constants, </span>
 <span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>                     <span class="at">use_tealeaves =</span> <span class="cn">TRUE</span>, <span class="at">progress =</span> <span class="cn">FALSE</span>, </span>
 <span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>                   <span class="at">quiet =</span> <span class="cn">TRUE</span>, <span class="at">parallel =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
@@ -597,7 +617,7 @@ package to calculate leaf temperature using an energy balance model.</p>
 <span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="do">## Drop units for plotting</span></span>
 <span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>ph <span class="sc">%&lt;&gt;%</span> </span>
 <span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_if</span>(<span class="sc">~</span> <span class="fu">is</span>(.x, <span class="st">&quot;units&quot;</span>), drop_units) <span class="sc">%&gt;%</span></span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">g[s]</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">ifelse</span>(g_sc <span class="sc">==</span> <span class="dv">2</span>, <span class="st">&quot;low&quot;</span>, <span class="st">&quot;high&quot;</span>))</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">g[s]</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">ifelse</span>(g_sc <span class="sc">==</span> <span class="fl">0.2</span>, <span class="st">&quot;low&quot;</span>, <span class="st">&quot;high&quot;</span>))</span>
 <span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ph, <span class="fu">aes</span>(T_air, T_leaf, <span class="at">color =</span> <span class="st">`</span><span class="at">g[s]</span><span class="st">`</span>)) <span class="sc">+</span></span>
 <span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">lineend =</span> <span class="st">&quot;round&quot;</span>) <span class="sc">+</span></span>

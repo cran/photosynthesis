@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Chris Muir" />
+
+<meta name="date" content="2022-11-08" />
+
+<title>Modeling C3 Photosynthesis: recommendations for common scenarios</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Modeling C3 Photosynthesis: recommendations
+for common scenarios</h1>
+<h4 class="author">Chris Muir</h4>
+<h4 class="date">2022-11-08</h4>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(photosynthesis)</span></code></pre></div>
+<div id="typical-hypostomatous-leaf" class="section level1">
+<h1>‘Typical’ hypostomatous leaf</h1>
+<p>Here I show how to implement a model close to the most widely used
+ones, in which boundary layer conductances are high, cuticular
+conductance is 0, all stomatal conductance is through the lower
+(abaxial) leaf surface, and there is a single mesophyll conductance. The
+advantage of this approach are that is its simplicity. You can ignore
+several complexities such as:</p>
+<ul>
+<li>Low boundary layer conductance that varies between surfaces (can
+happen in large leaves at low wind speed)</li>
+<li>Large cuticular conductance (this can be happen in young
+leaves)</li>
+<li>Stomatal conductance can occur through both surface in
+amphistomatous leaves (this is common in herbs, for example)</li>
+<li>Mesophyll conductance can be partitioned into air and liquid
+phases</li>
+</ul>
+<p>If these complexities are important to you, consider more complex
+models you can implement with <strong>photosynthesis</strong>. But, if
+you don’t care, here’s how to make things simple:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(photosynthesis)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>bake_par   <span class="ot">=</span> <span class="fu">make_bakepar</span>()                       <span class="co"># temperature response parameters</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>constants  <span class="ot">=</span> <span class="fu">make_constants</span>(<span class="at">use_tealeaves =</span> <span class="cn">FALSE</span>) <span class="co"># physical constants</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># leaf parameters</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>leaf_par   <span class="ot">=</span> <span class="fu">make_leafpar</span>(</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">replace =</span> <span class="fu">list</span>(</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Set cuticular conductance to 0</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">g_uc =</span> <span class="fu">set_units</span>(<span class="dv">0</span>, mol <span class="sc">/</span> m<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> s),</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># All conductance through lower stomata and mesophyll</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">k_mc =</span> <span class="fu">set_units</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">k_sc =</span> <span class="fu">set_units</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_tealeaves =</span> <span class="cn">FALSE</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  )   </span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>enviro_par <span class="ot">=</span> <span class="fu">make_enviropar</span>(<span class="at">use_tealeaves =</span> <span class="cn">FALSE</span>) <span class="co"># environmental parameters</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="fu">photo</span>(leaf_par, enviro_par, bake_par, constants, <span class="at">use_tealeaves =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(g_sc, A) <span class="sc">|&gt;</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&quot;Stomatal conductance to CO2 (g_sc) and net photosynthetic carbon assimilation (A) from C3 photosynthesis model.&quot;</span>)</span></code></pre></div>
+<table>
+<caption>Stomatal conductance to CO2 (g_sc) and net photosynthetic
+carbon assimilation (A) from C3 photosynthesis model.</caption>
+<thead>
+<tr class="header">
+<th align="right">g_sc</th>
+<th align="right">A</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.4 [mol/m^2/s]</td>
+<td align="right">26.37885 [umol/m^2/s]</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="amphistomatous-leaf" class="section level1">
+<h1>Amphistomatous leaf</h1>
+<p>Most leaves, especially on woody plants, are hypostomatous (Muir
+2015) meaning that all the stomatal conductance is through the lower
+(abaxial surface). But many fast-growing herbaceous species, especially
+crops (Milla <em>et al.</em> 2013), are amphistomatous. There are not a
+lot of measurements of how much conductance occurs through each surface
+(but see Wall <em>et al.</em> 2022), but we assume that if stomata are
+present on both leaf surfaces there is CO<sub>2</sub> flux through each
+surface. For amphistomatous leaves, I suggest explicitly modeling
+conductance through the internal airspace (<span class="math inline">\(g_\mathrm{ias,c}\)</span>) and liquid phase (<span class="math inline">\(g_\mathrm{liq,c}\)</span>). As of version 2.1.0
+this is possible in <strong>photosynthesis</strong>. Here’s a simple
+example:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(photosynthesis)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>bake_par   <span class="ot">=</span> <span class="fu">make_bakepar</span>()                       <span class="co"># temperature response parameters</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>constants  <span class="ot">=</span> <span class="fu">make_constants</span>(<span class="at">use_tealeaves =</span> <span class="cn">FALSE</span>) <span class="co"># physical constants</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># leaf parameters</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>leaf_par   <span class="ot">=</span> <span class="fu">make_leafpar</span>(</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">replace =</span> <span class="fu">list</span>(</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Set cuticular conductance to 0</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">g_uc =</span> <span class="fu">set_units</span>(<span class="dv">0</span>, mol <span class="sc">/</span> m<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> s),</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Half of conductance through each surface</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">k_mc =</span> <span class="fu">set_units</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># airspace conductance: define effective distance through airspace</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># See Nobel (2020) pg. 431</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">delta_ias_lower =</span> <span class="fu">set_units</span>(<span class="dv">100</span>, um),</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">delta_ias_upper =</span> <span class="fu">set_units</span>(<span class="dv">100</span>, um),</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># liquid conductance: sum of cell wall, plasma membrane, and cytosol resistance</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># We are implicitly ignoring chloroplast resistance</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># See Nobel (2020) pg. 448-452</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">A_mes_A =</span> <span class="fu">set_units</span>(<span class="dv">20</span>, <span class="dv">1</span>),</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">g_liqc25 =</span> <span class="fu">set_units</span>(<span class="fl">0.02</span>, mol <span class="sc">/</span> m<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> s),</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">k_sc =</span> <span class="fu">set_units</span>(<span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_tealeaves =</span> <span class="cn">FALSE</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  )   </span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>enviro_par <span class="ot">=</span> <span class="fu">make_enviropar</span>(<span class="at">use_tealeaves =</span> <span class="cn">FALSE</span>) <span class="co"># environmental parameters</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="fu">photo</span>(leaf_par, enviro_par, bake_par, constants, <span class="at">use_tealeaves =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(g_sc, g_iasc_lower, g_iasc_upper, g_liqc, A) <span class="sc">|&gt;</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&quot;Stomatal conductance to CO2 (g_sc), internal airspace resistance through lower and upper surfaces (g_iasc_x), liquid-phase conductance (g_liqc), and net photosynthetic carbon assimilation (A) from C3 photosynthesis model.&quot;</span>)</span></code></pre></div>
+<table>
+<caption>Stomatal conductance to CO2 (g_sc), internal airspace
+resistance through lower and upper surfaces (g_iasc_x), liquid-phase
+conductance (g_liqc), and net photosynthetic carbon assimilation (A)
+from C3 photosynthesis model.</caption>
+<colgroup>
+<col width="16%" />
+<col width="21%" />
+<col width="21%" />
+<col width="17%" />
+<col width="21%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">g_sc</th>
+<th align="right">g_iasc_lower</th>
+<th align="right">g_iasc_upper</th>
+<th align="right">g_liqc</th>
+<th align="right">A</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.4 [mol/m^2/s]</td>
+<td align="right">6.146029 [mol/m^2/s]</td>
+<td align="right">6.146029 [mol/m^2/s]</td>
+<td align="right">0.02 [mol/m^2/s]</td>
+<td align="right">27.4933 [umol/m^2/s]</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<p>Muir CD. 2015. Making pore choices: repeated regime shifts in
+stomatal ratio. <em>Proc Roy Soc B</em> 282: 20151498.</p>
+<p>Nobel PS. 2020. <em>Physicochemical and Environmental Plant
+Physiology</em>. 5th Edition. Academic Press.</p>
+<p>Rubén M, N de Diego-Vico, N Martín-Robles. 2013. Shifts in stomatal
+traits following the domestication of plant species. <em>Journal of
+Experimental Botany</em> 64(11): 3137–3146.</p>
+<p>Wall S, S Vialet-Chabrand, P Davey, JV Rie, A Galle, J Cockram, T
+Lawson. 2022. Stomata on the abaxial and adaxial leaf surfaces
+contribute differently to leaf gas exchange and photosynthesis in wheat.
+<em>New Phytologist</em> 235(5): 1743-1756.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
