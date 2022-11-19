@@ -11,9 +11,9 @@
 
 <meta name="author" content="Joseph R. Stinziano and Christopher D. Muir" />
 
-<meta name="date" content="2022-11-08" />
+<meta name="date" content="2022-11-19" />
 
-<title>Fitting light respiration</title>
+<title>Fit models to estimate light respiration</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -350,17 +350,327 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Fitting light respiration</h1>
+<h1 class="title toc-ignore">Fit models to estimate light
+respiration</h1>
 <h4 class="author">Joseph R. Stinziano and Christopher D. Muir</h4>
-<h4 class="date">2022-11-08</h4>
+<h4 class="date">2022-11-19</h4>
 
 </div>
 
 
+<div id="preferred-version-photosynthesis-2.1.1" class="section level2">
+<h2>Preferred version (<strong>photosynthesis</strong> &gt;= 2.1.1)</h2>
 <p>The package currently supports fitting light respiration according to
 the slope-intercept regression extension of the Laisk method (Laisk
 1977; Walker &amp; Ort 2015), the Kok method (Kok 1956), and the Yin
-modification of the Kok method (Yin et al. 2009, 2011)</p>
+modification of the Kok method (Yin <em>et al.</em> 2009, 2011).</p>
+<div id="estimate-light-respiration-using-least-squares-ls" class="section level3">
+<h3>Estimate light respiration using least-squares (ls)</h3>
+<div id="walker-ort-2015-model" class="section level4">
+<h4>Walker &amp; Ort (2015) model</h4>
+<pre class="r"><code>library(broom)
+library(dplyr)
+library(photosynthesis)
+
+acq_data = system.file(&quot;extdata&quot;, &quot;A_Ci_Q_data_1.csv&quot;, package = &quot;photosynthesis&quot;) |&gt; 
+  read.csv()
+
+fit = fit_photosynthesis(
+  .data = acq_data,
+  .photo_fun = &quot;r_light&quot;,
+  .model = &quot;walker_ort_2015&quot;,
+  .vars = list(.A = A, .Q = Qin, .C = Ci),
+  C_upper = 300,
+  # Irradiance levels used in experiment
+  Q_levels =  c(1500, 750, 375, 125, 100, 75, 50, 25),
+)
+
+# The &#39;fit&#39; object inherits class &#39;lm&#39; and many methods can be used
+
+## Model summary:
+summary(fit)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = `(Intercept)` ~ gamma_star, data = .)
+## 
+## Residuals:
+##       Min        1Q    Median        3Q       Max 
+## -0.218920 -0.136553  0.007685  0.117016  0.249953 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  -0.1949     0.1002  -1.945   0.0998 .  
+## gamma_star   44.3113     3.2518  13.627  9.7e-06 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.1738 on 6 degrees of freedom
+## Multiple R-squared:  0.9687, Adjusted R-squared:  0.9635 
+## F-statistic: 185.7 on 1 and 6 DF,  p-value: 9.698e-06</code></pre>
+<pre class="r"><code>## Estimated parameters:
+coef(fit)</code></pre>
+<pre><code>## (Intercept)  gamma_star 
+##    -0.19485    44.31131</code></pre>
+<pre class="r"><code>## 95% confidence intervals:
+## n.b. these confidence intervals are not correct because the regression is fit 
+## sequentially. It ignores the underlying data and uncertainty in estimates of 
+## slopes and intercepts with each A-C curve. Use &#39;.method = &quot;brms&quot;&#39; to properly 
+## calculate uncertainty. 
+confint(fit)</code></pre>
+<pre><code>##                  2.5 %      97.5 %
+## (Intercept) -0.4400221  0.05032205
+## gamma_star  36.3544139 52.26820542</code></pre>
+<pre class="r"><code>## Tidy summary table using &#39;broom::tidy()&#39;
+tidy(fit, conf.int = TRUE, conf.level = 0.95)</code></pre>
+<pre><code>## # A tibble: 2 × 7
+##   term        estimate std.error statistic    p.value conf.low conf.high
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)   -0.195     0.100     -1.94 0.0998       -0.440    0.0503
+## 2 gamma_star    44.3       3.25      13.6  0.00000970   36.4     52.3</code></pre>
+<pre class="r"><code>## Calculate residual sum-of-squares
+sum(resid(fit)^2)</code></pre>
+<pre><code>## [1] 0.1812764</code></pre>
+</div>
+<div id="yin-et-al.-2011-model" class="section level4">
+<h4>Yin <em>et al.</em> (2011) model</h4>
+<pre class="r"><code>library(broom)
+library(dplyr)
+library(photosynthesis)
+
+acq_data = system.file(&quot;extdata&quot;, &quot;A_Ci_Q_data_1.csv&quot;, package = &quot;photosynthesis&quot;) |&gt; 
+  read.csv()
+
+fit = fit_photosynthesis(
+  .data = acq_data,
+  .photo_fun = &quot;r_light&quot;,
+  .model = &quot;yin_etal_2011&quot;,
+  .vars = list(.A = A, .phiPSII = PhiPS2, .Q = Qin),
+  Q_lower = 20,
+  Q_upper = 250
+)
+
+# The &#39;fit&#39; object inherits class &#39;lm&#39; and many methods can be used
+
+## Model summary:
+summary(fit)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = .A ~ x_var, data = .)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.8587 -0.4493  0.2041  0.7420  2.2232 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -0.77214    0.39419  -1.959   0.0549 .  
+## x_var        0.22661    0.02739   8.274 2.13e-11 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.253 on 58 degrees of freedom
+## Multiple R-squared:  0.5414, Adjusted R-squared:  0.5335 
+## F-statistic: 68.46 on 1 and 58 DF,  p-value: 2.129e-11</code></pre>
+<pre class="r"><code>## Estimated parameters:
+coef(fit)</code></pre>
+<pre><code>## (Intercept)       x_var 
+##  -0.7721399   0.2266078</code></pre>
+<pre class="r"><code>## 95% confidence intervals:
+confint(fit)</code></pre>
+<pre><code>##                  2.5 %     97.5 %
+## (Intercept) -1.5611923 0.01691245
+## x_var        0.1717862 0.28142935</code></pre>
+<pre class="r"><code>## Tidy summary table using &#39;broom::tidy()&#39;
+tidy(fit, conf.int = TRUE, conf.level = 0.95)</code></pre>
+<pre><code>## # A tibble: 2 × 7
+##   term        estimate std.error statistic  p.value conf.low conf.high
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)   -0.772    0.394      -1.96 5.49e- 2   -1.56     0.0169
+## 2 x_var          0.227    0.0274      8.27 2.13e-11    0.172    0.281</code></pre>
+<pre class="r"><code>## Calculate residual sum-of-squares
+sum(resid(fit)^2)</code></pre>
+<pre><code>## [1] 91.04856</code></pre>
+</div>
+<div id="kok-1956-model" class="section level4">
+<h4>Kok (1956) model</h4>
+<pre class="r"><code>library(broom)
+library(dplyr)
+library(photosynthesis)
+
+acq_data = system.file(&quot;extdata&quot;, &quot;A_Ci_Q_data_1.csv&quot;, package = &quot;photosynthesis&quot;) |&gt; 
+  read.csv()
+
+fit = fit_photosynthesis(
+  .data = acq_data,
+  .photo_fun = &quot;r_light&quot;,
+  .model = &quot;kok_1956&quot;,
+  .vars = list(.A = A, .Q = Qin),
+  Q_lower = 20,
+  Q_upper = 150
+)
+
+# The &#39;fit&#39; object inherits class &#39;lm&#39; and many methods can be used
+
+## Model summary:
+summary(fit)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = .A ~ .Q, data = .)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -4.1759 -0.4492  0.2077  0.6613  2.3544 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -0.523701   0.396419  -1.321    0.192    
+## .Q           0.036347   0.004781   7.602 2.85e-10 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.309 on 58 degrees of freedom
+## Multiple R-squared:  0.4991, Adjusted R-squared:  0.4905 
+## F-statistic: 57.79 on 1 and 58 DF,  p-value: 2.851e-10</code></pre>
+<pre class="r"><code>## Estimated parameters:
+coef(fit)</code></pre>
+<pre><code>## (Intercept)          .Q 
+## -0.52370105  0.03634651</code></pre>
+<pre class="r"><code>## 95% confidence intervals:
+confint(fit)</code></pre>
+<pre><code>##                  2.5 %     97.5 %
+## (Intercept) -1.3172199 0.26981784
+## .Q           0.0267761 0.04591691</code></pre>
+<pre class="r"><code>## Tidy summary table using &#39;broom::tidy()&#39;
+tidy(fit, conf.int = TRUE, conf.level = 0.95)</code></pre>
+<pre><code>## # A tibble: 2 × 7
+##   term        estimate std.error statistic  p.value conf.low conf.high
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)  -0.524    0.396       -1.32 1.92e- 1  -1.32      0.270 
+## 2 .Q            0.0363   0.00478      7.60 2.85e-10   0.0268    0.0459</code></pre>
+<pre class="r"><code>## Calculate residual sum-of-squares
+sum(resid(fit)^2)</code></pre>
+<pre><code>## [1] 99.4385</code></pre>
+</div>
+</div>
+<div id="bayesian-estimate-of-light-respiration-with-brms-and-stan" class="section level3">
+<h3>Bayesian estimate of light respiration with <strong>brms</strong>
+and <em>Stan</em></h3>
+<p>We added an option to estimate light respiration (<span class="math inline">\(R_\mathrm{d}\)</span>) and the CO<span class="math inline">\(_2\)</span> compensation point (<span class="math inline">\(C_\mathrm{i}^*\)</span> or <span class="math inline">\(\Gamma^*\)</span>) using the amazing <a href="https://CRAN.R-project.org/package=brms"><strong>brms</strong></a>
+package which fits models in <a href="https://mc-stan.org/"><em>Stan</em></a>. This method has the
+advantage in that it properly estimates confidence intervals, but
+requires some post-processing. The example below shows how to do
+that.</p>
+<div id="walker-ort-2015-model-1" class="section level4">
+<h4>Walker &amp; Ort (2015) model</h4>
+<p>The code below is not run, but copy-and-paste into your console to
+see output.</p>
+<pre class="r"><code>library(dplyr)
+library(photosynthesis)
+library(tidyr)
+
+acq_data = system.file(&quot;extdata&quot;, &quot;A_Ci_Q_data_1.csv&quot;, package = &quot;photosynthesis&quot;) |&gt; 
+  read.csv()
+
+fit = fit_photosynthesis(
+  .data = acq_data,
+  .photo_fun = &quot;r_light&quot;,
+  .model = &quot;walker_ort_2015&quot;,
+  .method = &quot;brms&quot;,
+  .vars = list(.A = A, .Q = Qin, .C = Ci),
+  C_upper = 300,
+  # Irradiance levels used in experiment
+  Q_levels =  c(1500, 750, 375, 125, 100, 75, 50, 25),
+  brm_options = list(chains = 1, seed = 20221118)
+)
+
+# The &#39;fit&#39; object inherits class &#39;brmsfit&#39; and many methods can be used
+
+# The following code will extract parameter estimates and 95% CIs from the 
+# posterior distribution
+ests = fit |&gt;
+  as.data.frame() |&gt;
+  dplyr::select(
+    r_xy = `cor_.Q_level__Intercept__.C`,
+    sd_x = `sd_.Q_level__Intercept`,
+    sd_y = `sd_.Q_level__.C`,
+    mu_x = b_Intercept,
+    mu_y = b_.C
+  ) |&gt;
+  dplyr::mutate(
+    gamma_star = -r_xy * sd_x / sd_y,
+    Rd = mu_x + gamma_star * mu_y
+  ) |&gt;
+  dplyr::summarise(dplyr::across(gamma_star:Rd, list(
+    estimate = median,
+    lower = ~quantile(., probs = 0.25),
+    upper = ~quantile(., probs = 0.975)
+  ))) |&gt;
+  pivot_longer(
+    everything(),
+    names_to = c(&quot;parameter&quot;, &quot;.value&quot;),
+    names_pattern = &quot;(gamma_star|Rd)_(estimate|lower|upper)&quot;
+  )</code></pre>
+</div>
+<div id="yin-et-al.-2011-model-1" class="section level4">
+<h4>Yin <em>et al.</em> (2011) model</h4>
+<p>The code below is not run, but copy-and-paste into your console to
+see output.</p>
+<pre class="r"><code>library(photosynthesis)
+
+acq_data = system.file(&quot;extdata&quot;, &quot;A_Ci_Q_data_1.csv&quot;, package = &quot;photosynthesis&quot;) |&gt; 
+  read.csv()
+
+fit = fit_photosynthesis(
+  .data = acq_data,
+  .photo_fun = &quot;r_light&quot;,
+  .model = &quot;yin_etal_2011&quot;,
+  .method = &quot;brms&quot;,
+  .vars = list(.A = A, .phiPSII = PhiPS2, .Q = Qin),
+  Q_lower = 20,
+  Q_upper = 250,
+  brm_options = list(chains = 1)
+)
+
+# The &#39;fit&#39; object inherits class &#39;brmsfit&#39; and many methods can be used
+summary(fit)</code></pre>
+</div>
+<div id="kok-1956-model-1" class="section level4">
+<h4>Kok (1956) model</h4>
+<p>The code below is not run, but copy-and-paste into your console to
+see output.</p>
+<pre class="r"><code>library(photosynthesis)
+
+acq_data = system.file(&quot;extdata&quot;, &quot;A_Ci_Q_data_1.csv&quot;, package = &quot;photosynthesis&quot;) |&gt; 
+  read.csv()
+
+fit = fit_photosynthesis(
+  .data = acq_data,
+  .photo_fun = &quot;r_light&quot;,
+  .model = &quot;kok_1956&quot;,
+  .method = &quot;brms&quot;,
+  .vars = list(.A = A, .Q = Qin),
+  Q_lower = 20,
+  Q_upper = 150,
+  brm_options = list(chains = 1)
+)
+
+# The &#39;fit&#39; object inherits class &#39;brmsfit&#39; and many methods can be used
+summary(fit)</code></pre>
+</div>
+</div>
+</div>
+<div id="deprecated-version-photosynthesis-2.1.1" class="section level2">
+<h2>Deprecated version (<strong>photosynthesis</strong> &lt;=
+2.1.1)</h2>
+<p>The functions to estimate light respiration in the original version
+(<code>fit_r_light_kok()</code>, <code>fit_r_light_yin()</code>,
+<code>fit_r_light_WalkerOrt()</code>) will no longer be updated and may
+phase it out of future releases. Use one of:</p>
+<ul>
+<li><code>fit_photosynthesisi(..., .photo_fun = &#39;r_light&#39;, .model = &#39;kok_1956&#39;)</code></li>
+<li><code>fit_photosynthesisi(..., .photo_fun = &#39;r_light&#39;, .model = &#39;walker_ort_1956&#39;)</code></li>
+<li><code>fit_photosynthesisi(..., .photo_fun = &#39;r_light&#39;, .model = &#39;yin_etal_2011&#39;)</code></li>
+</ul>
 <pre class="r"><code>library(dplyr)
 library(photosynthesis)
 
@@ -373,7 +683,7 @@ round_to_nearest = function(x, values) {
 # Read in your data
 dat = system.file(&quot;extdata&quot;, &quot;A_Ci_Q_data_1.csv&quot;, package = &quot;photosynthesis&quot;) |&gt; 
   read.csv() |&gt;
-  mutate(group = round_to_nearest(CO2_s, values = c(50, 100, 200, 300, 410, 600, 820, 1200, 1600))) |&gt;
+  mutate(group = photosynthesis:::round_to_nearest(CO2_s, values = c(50, 100, 200, 300, 410, 600, 820, 1200, 1600))) |&gt;
   rename(A_net = A, PPFD = Qin, phi_PSII = PhiPS2, C_i = Ci)
 
 # Fit light respiration with Yin method
@@ -421,6 +731,7 @@ summary(walker_ort[[1]])</code></pre>
 walker_ort[[3]]</code></pre>
 <pre><code>##       GammaStar   r_light
 ## Slope  46.00427 -0.152643</code></pre>
+</div>
 <div id="references" class="section level1">
 <h1>References</h1>
 <p>Kok B. 1956. On the inhibition of photosynthesis by intense light.

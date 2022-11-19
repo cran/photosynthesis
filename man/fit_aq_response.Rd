@@ -35,10 +35,12 @@ sum of squares (resid_SS). Note that Rd fitted in this way is essentially
 the same as the Kok method, and represents a respiration value in the
 light that may not be accurate. Rd output should thus be interpreted more
 as a residual parameter to ensure an accurate fit of the light response
-parameters. Model originally from Marshall et al. 1980.
+parameters. Model originally from Marshall & Biscoe 1980.
 }
 \description{
-Fitting light responses of net CO2 assimilation
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+Please use \code{fit_aq_response2()}.
 }
 \examples{
 \donttest{
@@ -46,20 +48,20 @@ Fitting light responses of net CO2 assimilation
 # Note that this data is coming from data supplied by the package
 # hence the complicated argument in read.csv()
 # This dataset is a CO2 by light response curve for a single sunflower
-data <- read.csv(system.file("extdata", "A_Ci_Q_data_1.csv",
+data = read.csv(system.file("extdata", "A_Ci_Q_data_1.csv",
   package = "photosynthesis"
 ))
 
 # Fit many AQ curves
 # Set your grouping variable
 # Here we are grouping by CO2_s and individual
-data$C_s <- (round(data$CO2_s, digits = 0))
+data$C_s = (round(data$CO2_s, digits = 0))
 
 # For this example we need to round sequentially due to CO2_s setpoints
-data$C_s <- as.factor(round(data$C_s, digits = -1))
+data$C_s = as.factor(round(data$C_s, digits = -1))
 
 # To fit one AQ curve
-fit <- fit_aq_response(data[data$C_s == 600, ],
+fit = fit_aq_response(data[data$C_s == 600, ],
   varnames = list(
     A_net = "A",
     PPFD = "Qin"
@@ -76,7 +78,7 @@ fit[[2]]
 fit[[3]]
 
 # Fit many curves
-fits <- fit_many(
+fits = fit_many(
   data = data,
   varnames = list(
     A_net = "A",
@@ -99,16 +101,17 @@ fits[[3]][[2]]
 fits[[3]][[3]]
 
 # Compile graphs into a list for plotting
-fits_graphs <- compile_data(fits,
+fits_graphs = compile_data(fits,
   list_element = 3
 )
 
 # Compile parameters into dataframe for analysis
-fits_pars <- compile_data(fits,
+fits_pars = compile_data(fits,
   output_type = "dataframe",
   list_element = 2
 )
 }
+
 }
 \references{
 Marshall B, Biscoe P. 1980. A model for C3 leaves describing the

@@ -40,7 +40,7 @@ fit_r_light_yin(
 
 \item{P}{Atmospheric pressure in kPa (Walker & Ort, 2015)}
 
-\item{C_i_threshold}{Threshold C_i (in umol mol-1) to cut data to
+\item{C_i_threshold}{Threshold C_i (in umol / mol) to cut data to
 linear region for fitting light respiration and gamma_star
 (Walker & Ort, 2015)}
 }
@@ -72,7 +72,9 @@ better estimate of light respiration. Note that respiration
 output should be negative here to denote an efflux of CO2.
 }
 \description{
-Estimating light respiration
+`r lifecycle::badge("deprecated")`
+
+Please use `fit_r_light2()`.
 }
 \examples{
 \donttest{
@@ -81,12 +83,12 @@ Estimating light respiration
 # Note that this data is coming from data supplied by the package
 # hence the complicated argument in read.csv()
 # This dataset is a CO2 by light response curve for a single sunflower
-data <- read.csv(system.file("extdata", "A_Ci_Q_data_1.csv",
+data = read.csv(system.file("extdata", "A_Ci_Q_data_1.csv",
   package = "photosynthesis"
 ))
 
 # Fit light respiration with Kok method
-r_light <- fit_r_light_kok(
+r_light = fit_r_light_kok(
   data = data,
   varnames = list(
     A_net = "A",
@@ -103,12 +105,12 @@ r_light
 # Note that this data is coming from data supplied by the package
 # hence the complicated argument in read.csv()
 # This dataset is a CO2 by light response curve for a single sunflower
-data <- read.csv(system.file("extdata", "A_Ci_Q_data_1.csv",
+data = read.csv(system.file("extdata", "A_Ci_Q_data_1.csv",
   package = "photosynthesis"
 ))
 
 # Fit the Walker-Ort method for GammaStar and light respiration
-walker_ort <- fit_r_light_WalkerOrt(data,
+walker_ort = fit_r_light_WalkerOrt(data,
   varnames = list(
     A_net = "A",
     C_i = "Ci",
@@ -129,12 +131,12 @@ walker_ort[[3]]
 # Note that this data is coming from data supplied by the package
 # hence the complicated argument in read.csv()
 # This dataset is a CO2 by light response curve for a single sunflower
-data <- read.csv(system.file("extdata", "A_Ci_Q_data_1.csv",
+data = read.csv(system.file("extdata", "A_Ci_Q_data_1.csv",
   package = "photosynthesis"
 ))
 
 # Fit light respiration with Yin method
-r_light <- fit_r_light_yin(
+r_light = fit_r_light_yin(
   data = data,
   varnames = list(
     A_net = "A",
