@@ -2,7 +2,7 @@
 #
 
 #' @inheritParams photosynthesis
-#' @param .x A list to be constructed into \strong{leaf_par}.
+#' @param .x A list to be constructed into **leaf_par**.
 #'
 #' @returns 
 #'
@@ -42,11 +42,12 @@ leaf_par = function(.x, use_tealeaves) {
 
 check_for_legacy_gunit = function(pars) {
   
-  pars |>
+  xx = pars |>
     purrr::map(units) |>
     purrr::map_lgl(units::ud_are_convertible, y = "umol / m^2 / s / Pa") |>
-    any() %>%
-    purrr::when(. ~ {
+    any()
+  
+    if (xx) {
       
       message(
         "
@@ -65,7 +66,7 @@ check_for_legacy_gunit = function(pars) {
       "
       )
       stop("Incorrect conductance units in leaf_par()", call. = FALSE)
-    })
+    }
   
   invisible()
   

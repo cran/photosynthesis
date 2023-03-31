@@ -11,7 +11,7 @@
 
 <meta name="author" content="Joseph R. Stinziano and Christopher D. Muir" />
 
-<meta name="date" content="2022-11-19" />
+<meta name="date" content="2023-03-31" />
 
 <title>Fitting light response curves</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">Fitting light response curves</h1>
 <h4 class="author">Joseph R. Stinziano and Christopher D. Muir</h4>
-<h4 class="date">2022-11-19</h4>
+<h4 class="date">2023-03-31</h4>
 
 </div>
 
@@ -544,11 +544,17 @@ dat = system.file(&quot;extdata&quot;, &quot;A_Ci_Q_data_1.csv&quot;, package = 
 # To fit one AQ curve
 fit = fit_aq_response(filter(dat, group == 600))</code></pre>
 <pre><code>## Warning: `fit_aq_response()` was deprecated in photosynthesis 2.1.1.
-## ℹ Please use the `.photo_fun` argument of `fit_photosynthesis()` instead.</code></pre>
+## ℹ Please use the `.photo_fun` argument of `fit_photosynthesis()` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.</code></pre>
 <pre><code>## Warning: `aq_response()` was deprecated in photosynthesis 2.1.1.
 ## ℹ Please use `marshall_biscoe_1980()` instead.
 ## ℹ The deprecated feature was likely used in the photosynthesis package.
-##   Please report the issue at &lt;]8;;https://github.com/cdmuir/photosynthesis/issueshttps://github.com/cdmuir/photosynthesis/issues]8;;&gt;.</code></pre>
+##   Please report the issue at &lt;https://github.com/cdmuir/photosynthesis/issues&gt;.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.</code></pre>
 <pre class="r"><code># Print model summary
 summary(fit[[1]])</code></pre>
 <pre><code>## 

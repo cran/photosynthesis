@@ -1,3 +1,14 @@
+# photosynthesis 2.1.2
+
+* Updated CITATION using `bibentry()` instead of `citEntry()`
+* Resolved **purrr** deprecations
+* removed `expect_no_condition()` from unit tests to resolved issue #12
+* Replaced `dplyr::progress_estimated()` with `progress::progress_bar()`
+* Fixed error in `photo(..., use_tealeaves = TRUE)`. User-defined changes in stomatal conductance ratio were not being passed to **tealeaves**.
+* Added evaporation (E) to `photo()` and `photosynthesis()` output when `use_tealeaves = TRUE`
+* Fixed issue with **lifecycle** badges
+* Added new function `simulate_error()` to simulate measurement error in gas exchange measurements.
+
 # photosynthesis 2.1.1
 
 * Added Bayesian options to fit light-response and light respiration models via `fit_photosynthesis(..., .method = "brms")`
