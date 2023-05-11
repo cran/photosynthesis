@@ -1,3 +1,9 @@
+# photosynthesis 2.1.3
+
+* Added example LI6800 data set (inst/extdata/li6800_example) for unit testing `read_licor()`
+* Soft-deprecated `read_li6800()` in favor of `read_licor()`
+* Soft-deprecated `fit_many()` in favor of generic methods like `purrr::map()`
+
 # photosynthesis 2.1.2
 
 * Updated CITATION using `bibentry()` instead of `citEntry()`

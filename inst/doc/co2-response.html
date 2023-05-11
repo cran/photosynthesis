@@ -11,7 +11,7 @@
 
 <meta name="author" content="Joseph R. Stinziano and Christopher D. Muir" />
 
-<meta name="date" content="2023-03-31" />
+<meta name="date" content="2023-05-11" />
 
 <title>Fitting CO2 response curves</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">Fitting CO2 response curves</h1>
 <h4 class="author">Joseph R. Stinziano and Christopher D. Muir</h4>
-<h4 class="date">2023-03-31</h4>
+<h4 class="date">2023-05-11</h4>
 
 </div>
 
@@ -404,9 +404,12 @@ fits = fit_many(
   funct = fit_aci_response, 
   group = &quot;group&quot;, 
   progress = FALSE
-)
-
-# Print the parameters
+)</code></pre>
+<pre><code>## Warning: `fit_many()` was deprecated in photosynthesis 2.1.3.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.</code></pre>
+<pre class="r"><code># Print the parameters
 # First set of double parentheses selects an individual group value
 # Second set selects an element of the sublist
 fits[[3]][[1]]</code></pre>

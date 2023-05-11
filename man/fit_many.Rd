@@ -23,7 +23,9 @@ fit_many fits a function across every instance of
 a grouping variable.
 }
 \description{
-Fitting many functions across groups
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+We are no longer updating this function. Please use generic methods like \code{\link[purrr]{map}} instead. See \code{vignette("light-response")} for an example.
 }
 \examples{
 \donttest{
@@ -75,4 +77,5 @@ fits_pars = compile_data(fits,
   list_element = 1
 )
 }
+
 }

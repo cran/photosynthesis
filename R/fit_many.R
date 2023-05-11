@@ -1,5 +1,10 @@
 #' Fitting many functions across groups
 #'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#' 
+#' We are no longer updating this function. Please use generic methods like \code{\link[purrr]{map}} instead. See `vignette("light-response")` for an example.
+#' 
 #' @param data Dataframe
 #' @param funct Function to fit
 #' @param group Grouping variables
@@ -63,6 +68,9 @@
 #'   list_element = 1
 #' )
 #' }
+#' 
+#' @md
+
 fit_many = function(
     data,
     funct,
@@ -70,6 +78,8 @@ fit_many = function(
     progress = TRUE,
     ...
 ) {
+  
+  lifecycle::deprecate_soft("2.1.3", "fit_many()")
   
   checkmate::assert_flag(progress)
   
