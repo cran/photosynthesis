@@ -11,7 +11,7 @@
 
 <meta name="author" content="Joseph R. Stinziano and Christopher D. Muir" />
 
-<meta name="date" content="2023-05-11" />
+<meta name="date" content="2023-08-15" />
 
 <title>Fitting light response curves</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">Fitting light response curves</h1>
 <h4 class="author">Joseph R. Stinziano and Christopher D. Muir</h4>
-<h4 class="date">2023-05-11</h4>
+<h4 class="date">2023-08-15</h4>
 
 </div>
 
@@ -408,7 +408,7 @@ summary(fit)</code></pre>
 <pre class="r"><code>## Estimated parameters:
 coef(fit)</code></pre>
 <pre><code>##       k_sat       phi_J     theta_J          Rd 
-## 21.17033712  0.06154347  0.77575157  0.66631983</code></pre>
+## 21.17033721  0.06154348  0.77575157  0.66631987</code></pre>
 <pre class="r"><code>## 95% confidence intervals:
 confint(fit)</code></pre>
 <pre><code>##                2.5%       97.5%
@@ -488,12 +488,12 @@ fits |&gt;
   map(as.data.frame) |&gt;
   imap_dfr(~ mutate(.x, CO2_s = .y))</code></pre>
 <pre><code>##        k_sat       phi_J   theta_J          Rd CO2_s
-## 1 -0.1832198 0.004189778 0.2428476 -0.09209662    50
+## 1 -0.1832198 0.004189779 0.2428476 -0.09209662    50
 ## 2  2.6370733 0.017295931 0.8858139  0.59492313   100
-## 3  7.3481571 0.032255707 0.8376461  0.61479142   200
+## 3  7.3481571 0.032255707 0.8376462  0.61479141   200
 ## 4 11.4687982 0.045046336 0.7898826  0.76746932   300
 ## 5 16.4505827 0.057537264 0.6997933  0.89736502   410
-## 6 21.1703371 0.061543474 0.7757516  0.66631983   600
+## 6 21.1703372 0.061543475 0.7757516  0.66631987   600
 ## 7 23.9305140 0.067744069 0.7514331  0.78493847   820
 ## 8 25.0686239 0.068975627 0.7632357  0.58529680  1200
 ## 9 25.6413999 0.071556328 0.7411443  0.45326420  1600</code></pre>
